@@ -58,13 +58,13 @@ public class ConnectReceipt_manager_supplier extends ConnectMysql {
             
             int row = pst.executeUpdate();
             if(row>0){
-                System.out.println("Inserted to DataBase");
-                JOptionPane.showMessageDialog(null, "Add Receipt_manager_supplier successful");
+            	 JOptionPane.showMessageDialog(null, "Add Receipt_manager_supplier successful");
             }else{
-                System.out.println("Insert Error");
+            	JOptionPane.showMessageDialog(null, "Insert Receipt_manager_supplier ERROR", "alert", JOptionPane.ERROR_MESSAGE);
             }
         } catch (SQLException ex) {
             Logger.getLogger(ConnectReceipt_manager_supplier.class.getName()).log(Level.SEVERE, null, ex);
+        	JOptionPane.showMessageDialog(null, "Insert Receipt_manager_supplier ERROR", "alert", JOptionPane.ERROR_MESSAGE);
             System.out.println("Insert Import_ReceiptERROR");
         }
     }

@@ -21,9 +21,9 @@ public class RemmeberAccount {
 		ResultSet rs = connectUser_login.getData_Userlogin();
 		try {
 			while(rs.next()){
+				//loop to get last
 					admin.setTaiKhoan(rs.getString(3));
-					admin.setId(Integer.parseInt(rs.getString(1)));
-					admin.setMatKhau("");
+					admin.setId(rs.getInt(1));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -55,6 +55,7 @@ public class RemmeberAccount {
 		ResultSet rs = connectsave.getData_save();
 		try {
 			while(rs.next()){
+			// loop to get Account last
 					admin.setTaiKhoan(rs.getString(2));
 					admin.setId(rs.getInt(4));
 					admin.setMatKhau(rs.getString(3));

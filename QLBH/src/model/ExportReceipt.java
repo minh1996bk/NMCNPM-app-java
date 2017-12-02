@@ -3,14 +3,13 @@ package model;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class ExportReceipt {
   private int code;
   private Employee employee;
-  private LinkedHashMap<Product, Integer[]> listItem;
+  private ArrayList<Product> item;
   private Date time;
   
   public ExportReceipt() {
@@ -25,14 +24,6 @@ public class ExportReceipt {
     this.code = code;
   }
 
-  public LinkedHashMap<Product, Integer[]> getListItem() {
-    return listItem;
-  }
-
-  public void setListItem(LinkedHashMap<Product, Integer[]> listItem) {
-    this.listItem = listItem;
-  }
-
 
   public Date getTime() {
     return time;
@@ -44,10 +35,8 @@ public class ExportReceipt {
   
   public boolean containsProductId(Product pro) {
     boolean check = false;
-    Product product;
-    for (Map.Entry<Product, Integer[]> pair : this.listItem.entrySet()) {
-      product = pair.getKey();
-      if (product.getIdNumber() == pro.getIdNumber()) {
+    for (Product pair : this.item) {
+      if (pair.getIdNumber() == pro.getIdNumber()) {
         check = true;
         break;
       }
@@ -68,16 +57,14 @@ public class ExportReceipt {
     writer.write(System.lineSeparator());
     writer.write("Products : ");
     writer.write(System.lineSeparator());
-    Product product;
-    for (Map.Entry<Product, Integer[]> pair : this.listItem.entrySet()) {
-      product = pair.getKey();
-      writer.write("" + product.getIdNumber());
+    for (Product pair : this.item) {
+      writer.write("" + pair.getIdNumber());
       writer.write("++++");
-      writer.write(product.getName());
+      writer.write(pair.getName());
       writer.write("++++");
-      writer.write("" + pair.getValue()[0]);
+      writer.write("" + pair.getPrice());
       writer.write("++++");
-      writer.write("" + pair.getValue()[1]);
+      writer.write("" + pair.getTotal());
       writer.write(System.lineSeparator());
     }
     bwriter.close();
@@ -95,5 +82,19 @@ public Employee getEmployee() {
  */
 public void setEmployee(Employee employee) {
 	this.employee = employee;
+}
+
+/**
+ * @return the item
+ */
+public ArrayList<Product> getItem() {
+	return item;
+}
+
+/**
+ * @param item the item to set
+ */
+public void setItem(ArrayList<Product> item) {
+	this.item = item;
 }
 }

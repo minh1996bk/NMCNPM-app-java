@@ -149,7 +149,7 @@ public class login extends JFrame {
                 ResultSet rs = ConnectMySQL.getData_account(text_account.getText(), String.valueOf(text_pass.getPassword()));
                 while(rs.next()) {
                 	userlogin.setId(rs.getInt(1));
-                	userlogin.setAccount(rs.getString(3));
+                	userlogin.setAccount(rs.getString(2));
                 }
                 userlogin.setTime(date);
                 ConnectMySQL.insertDB_account(userlogin);

@@ -56,13 +56,13 @@ public class Connectsupplier extends ConnectMysql {
             
             int row = pst.executeUpdate();
             if(row>0){
-                System.out.println("Inserted to DataBase");
                 JOptionPane.showMessageDialog(null, "Add Supplier successful");
             }else{
-                System.out.println("Insert Error");
-            }
+            	JOptionPane.showMessageDialog(null, "Insert Supplier ERROR", "alert", JOptionPane.ERROR_MESSAGE);            
+            	}
         } catch (SQLException ex) {
             Logger.getLogger(Connectsupplier.class.getName()).log(Level.SEVERE, null, ex);
+        	JOptionPane.showMessageDialog(null, "Insert Supplier ERROR", "alert", JOptionPane.ERROR_MESSAGE);            
             System.out.println("Insert Supplier ERROR");
         }
     }

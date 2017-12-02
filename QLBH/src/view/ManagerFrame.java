@@ -17,9 +17,11 @@ import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 
 import control.CheckImformation;
+import control.Export;
 import control.FindData;
 import control.LoadDatatoTable;
 import control.RemmeberAccount;
+import control.statistic;
 import model.Employee;
 import model.Manager;
 import model.Product;
@@ -36,6 +38,9 @@ import connectsql.Connectemployee;
 import connectsql.Connectproduct;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.SwingConstants;
+import com.toedter.calendar.JMonthChooser;
+import com.toedter.calendar.JYearChooser;
 
 public class ManagerFrame extends JFrame {
 
@@ -69,6 +74,10 @@ public class ManagerFrame extends JFrame {
 	private JTextField employee_commission;
 	private JTable importtable;
 	private JDateChooser dateimport;
+	private JTable table_statistic;
+	private JComboBox<String> combox_statistic;
+	private JMonthChooser monthChooser;
+	private JYearChooser yearChooser;
 
 	/**
 	 * Launch the application.
@@ -132,7 +141,10 @@ public class ManagerFrame extends JFrame {
 					.addGap(18)
 					.addComponent(btnNewButton_5, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
 					.addGap(185))
-				.addComponent(tabbedPane, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 853, GroupLayout.PREFERRED_SIZE)
+					.addGap(176))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -249,8 +261,8 @@ public class ManagerFrame extends JFrame {
 		JLabel lblNewLabel_1 = new JLabel("T\u00ECm ki\u1EBFm theo");
 		
 		combox_product = new JComboBox<String>();
-		combox_product.setModel(new DefaultComboBoxModel<String>(new String[] {"ID", "T\u00EAn m\u1EB7t h\u00E0ng", "N\u01A1i s\u1EA3n xu\u1EA5t", "Ng\u00E0y s\u1EA3n xu\u1EA5t", "H\u1EA1n s\u1EED d\u1EE5ng "}));
-		
+		combox_product.setModel(new DefaultComboBoxModel<String>(new String[] {"ID", "Tên mặt hàng", "Nơi sản xuất", "Ngày sản xuất", "Hạn sử dụng "}));
+
 		inputp = new JTextField();
 		inputp.setColumns(10);
 		
@@ -262,6 +274,10 @@ public class ManagerFrame extends JFrame {
 		});
 		
 		JButton btnNewButton_4 = new JButton("Xem t\u1EA5t c\u1EA3");
+		btnNewButton_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		GroupLayout gl_panel_7 = new GroupLayout(panel_7);
@@ -686,6 +702,7 @@ public class ManagerFrame extends JFrame {
 		});
 		
 		JLabel lblNewLabel_3 = new JLabel("Nhập kho ngày");
+		lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		dateimport = new JDateChooser();
 		
@@ -695,6 +712,8 @@ public class ManagerFrame extends JFrame {
 				findimportActionPerformed(arg0);
 			}
 		});
+		
+		JButton btnNewButton_8 = new JButton("In ra file");
 		GroupLayout gl_panel_3 = new GroupLayout(panel_3);
 		gl_panel_3.setHorizontalGroup(
 			gl_panel_3.createParallelGroup(Alignment.LEADING)
@@ -712,8 +731,10 @@ public class ManagerFrame extends JFrame {
 								.addComponent(btnShowallimport, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)))
 						.addGroup(gl_panel_3.createSequentialGroup()
 							.addGap(21)
-							.addComponent(scrollPane_4, GroupLayout.PREFERRED_SIZE, 819, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(184, Short.MAX_VALUE))
+							.addGroup(gl_panel_3.createParallelGroup(Alignment.TRAILING)
+								.addComponent(btnNewButton_8)
+								.addComponent(scrollPane_4, GroupLayout.PREFERRED_SIZE, 803, GroupLayout.PREFERRED_SIZE))))
+					.addContainerGap(24, Short.MAX_VALUE))
 		);
 		gl_panel_3.setVerticalGroup(
 			gl_panel_3.createParallelGroup(Alignment.TRAILING)
@@ -724,11 +745,13 @@ public class ManagerFrame extends JFrame {
 							.addComponent(dateimport, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 							.addComponent(lblNewLabel_3, GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE))
 						.addComponent(btnTmKim, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
 					.addComponent(btnShowallimport, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
-					.addComponent(scrollPane_4, GroupLayout.PREFERRED_SIZE, 335, GroupLayout.PREFERRED_SIZE)
-					.addGap(28))
+					.addComponent(scrollPane_4, GroupLayout.PREFERRED_SIZE, 312, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnNewButton_8, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
 		);
 		
 		importtable = new JTable();
@@ -746,6 +769,7 @@ public class ManagerFrame extends JFrame {
 		tabbedPane.addTab("Qu\u1EA3n l\u00FD xu\u1EA5t kho", null, panel_4, null);
 		
 		JLabel lblNewLabel_4 = new JLabel("Xuất Kho Ngày");
+		lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		JDateChooser dateChooser_1 = new JDateChooser();
 		
@@ -754,41 +778,162 @@ public class ManagerFrame extends JFrame {
 		JButton btnNewButton_6 = new JButton("Xem tất cả");
 		
 		JScrollPane scrollPane_5 = new JScrollPane();
+		
+		JButton btnNewButton_1 = new JButton("In ra file ");
 		GroupLayout gl_panel_4 = new GroupLayout(panel_4);
 		gl_panel_4.setHorizontalGroup(
 			gl_panel_4.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_4.createSequentialGroup()
 					.addGap(78)
 					.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel_4.createSequentialGroup()
-							.addComponent(lblNewLabel_4, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(dateChooser_1, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(btnNewButton_3, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE))
 						.addComponent(btnNewButton_6, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)
-						.addComponent(scrollPane_5, GroupLayout.PREFERRED_SIZE, 696, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(189, Short.MAX_VALUE))
+						.addGroup(gl_panel_4.createSequentialGroup()
+							.addComponent(lblNewLabel_4, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(dateChooser_1, GroupLayout.PREFERRED_SIZE, 167, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnNewButton_3, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel_4.createParallelGroup(Alignment.TRAILING)
+							.addComponent(btnNewButton_1)
+							.addComponent(scrollPane_5, GroupLayout.PREFERRED_SIZE, 696, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(74, Short.MAX_VALUE))
 		);
 		gl_panel_4.setVerticalGroup(
 			gl_panel_4.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_4.createSequentialGroup()
 					.addGap(59)
-					.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnNewButton_3, GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
-						.addComponent(lblNewLabel_4, GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
-						.addComponent(dateChooser_1, GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE))
-					.addGap(35)
+					.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(btnNewButton_3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(lblNewLabel_4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(dateChooser_1, GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
+					.addGap(18)
 					.addComponent(btnNewButton_6, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(scrollPane_5, GroupLayout.PREFERRED_SIZE, 317, GroupLayout.PREFERRED_SIZE)
-					.addGap(20))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(scrollPane_5, GroupLayout.PREFERRED_SIZE, 303, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(btnNewButton_1, GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
+					.addContainerGap())
 		);
 		panel_4.setLayout(gl_panel_4);
 		
 		JPanel panel_5 = new JPanel();
 		tabbedPane.addTab("Th\u1ED1ng k\u00EA", null, panel_5, null);
+		
+		JLabel lblNewLabel_5 = new JLabel("Thống kê theo");
+		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		combox_statistic = new JComboBox<String>();
+		combox_statistic.setModel(new DefaultComboBoxModel<String>(new String[] {"", "Tổng số tiền phụ phí trong một tháng", "Tổng số tiền nhập kho trong một tháng ", "Tổng số tiền xuất kho trong một tháng", "Doanh thu trong một tháng"}));
+		
+		JButton btnStatistic = new JButton("Thống kê");
+		btnStatistic.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				btnStasiticActionperformed(arg0);
+			}
+		});
+		
+		JScrollPane scrollPane_6 = new JScrollPane();
+		
+		monthChooser = new JMonthChooser();
+		
+		yearChooser = new JYearChooser();
+		
+		JButton btnExporttoExcelFile = new JButton("Xuất file excel");
+		btnExporttoExcelFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				btnExporttoExcelFileActionperformed(arg0);
+			}
+		});
+		GroupLayout gl_panel_5 = new GroupLayout(panel_5);
+		gl_panel_5.setHorizontalGroup(
+			gl_panel_5.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_5.createSequentialGroup()
+					.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_5.createSequentialGroup()
+							.addGap(182)
+							.addComponent(lblNewLabel_5, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_panel_5.createSequentialGroup()
+									.addComponent(combox_statistic, GroupLayout.PREFERRED_SIZE, 273, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(btnStatistic, GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_panel_5.createParallelGroup(Alignment.TRAILING, false)
+									.addComponent(yearChooser, Alignment.LEADING, 0, 0, Short.MAX_VALUE)
+									.addComponent(monthChooser, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE))))
+						.addGroup(gl_panel_5.createSequentialGroup()
+							.addGap(116)
+							.addGroup(gl_panel_5.createParallelGroup(Alignment.TRAILING)
+								.addComponent(btnExporttoExcelFile)
+								.addComponent(scrollPane_6, GroupLayout.PREFERRED_SIZE, 585, GroupLayout.PREFERRED_SIZE))))
+					.addContainerGap(147, Short.MAX_VALUE))
+		);
+		gl_panel_5.setVerticalGroup(
+			gl_panel_5.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_5.createSequentialGroup()
+					.addGap(65)
+					.addGroup(gl_panel_5.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnStatistic, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+						.addComponent(combox_statistic, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel_5, GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(monthChooser, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(yearChooser, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(scrollPane_6, GroupLayout.PREFERRED_SIZE, 270, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnExporttoExcelFile, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
+		);
+		GroupLayout gl_yearChooser = new GroupLayout(yearChooser);
+		gl_yearChooser.setHorizontalGroup(
+			gl_yearChooser.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_yearChooser.createSequentialGroup()
+					.addComponent(yearChooser.getSpinner(), GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(148, Short.MAX_VALUE))
+		);
+		gl_yearChooser.setVerticalGroup(
+			gl_yearChooser.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_yearChooser.createSequentialGroup()
+					.addComponent(yearChooser.getSpinner(), GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
+		yearChooser.setLayout(gl_yearChooser);
+		
+		table_statistic = new JTable();
+		scrollPane_6.setViewportView(table_statistic);
+		panel_5.setLayout(gl_panel_5);
 		contentPane.setLayout(gl_contentPane);
+	}
+	//btn export to excel 
+	protected void btnExporttoExcelFileActionperformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		Export export = new Export();
+		Object[] options = { "OK", "CANCEL" };
+		int choose = JOptionPane.showOptionDialog(this, "Do you want to export excel file?", "Warning",
+		JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
+		null, options, options[0]);
+		if(choose == JOptionPane.OK_OPTION){
+			export.ExporttoExcel(table_statistic);
+		}
+	}
+	//stastitic actionperformed
+	protected void btnStasiticActionperformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		statistic stt = new statistic(table_statistic, monthChooser, yearChooser);
+		if(combox_statistic.getSelectedIndex()==1) {
+			
+		}
+		if(combox_statistic.getSelectedIndex()==2) {
+			stt.Statistic_Import();
+		}
+		if(combox_statistic.getSelectedIndex()==3) {
+			
+		}
+		if(combox_statistic.getSelectedIndex()==4) {
+			
+		}
 	}
 	//find import depend on date
 	protected void findimportActionPerformed(ActionEvent arg0) {
@@ -819,7 +964,7 @@ public class ManagerFrame extends JFrame {
 		int id = RemmeberAccount.TakeoutAccountlogin().getId();
 		Manager manager = new Manager();
 		manager = manager.Converttomanager(con.getData_employee(id));
-		AddImportReceipt ir = new AddImportReceipt(manager,this); 
+		AddImportReceipt1 ir = new AddImportReceipt1(manager,this); 
 		this.setEnabled(false);
 		ir.setVisible(true);		
 	}
@@ -856,7 +1001,6 @@ public class ManagerFrame extends JFrame {
 		connectproduct.Connect();
 		LoadDatatoTable load = new LoadDatatoTable(table_product);
 		load.Loaddatatotable_product(connectproduct.getData_product());
-		
 	}
 	// FindEmployee Button  depend on combox and input 
 	protected void btnFindemployeeActionPerformed(ActionEvent arg0) {

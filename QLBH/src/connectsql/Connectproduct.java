@@ -57,13 +57,13 @@ public class Connectproduct extends ConnectMysql {
 	            
 	        int row = pst.executeUpdate();
 	        if(row>0){
-	        	System.out.println("Inserted to DataBase");
-	            JOptionPane.showMessageDialog(null, "Insert successful");
+	            JOptionPane.showMessageDialog(null, "Insert product successful");
 	            }else{
-	                System.out.println("Insert Error");
+	            	JOptionPane.showMessageDialog(null, "Insert product ERROR", "alert", JOptionPane.ERROR_MESSAGE);
 	            }
 	        } catch (SQLException ex) {
 	            Logger.getLogger(Connectproduct.class.getName()).log(Level.SEVERE, null, ex);
+            	JOptionPane.showMessageDialog(null, "Insert product ERROR", "alert", JOptionPane.ERROR_MESSAGE);
 	            System.out.println("Insert product ERROR");
 	        }
 	    }

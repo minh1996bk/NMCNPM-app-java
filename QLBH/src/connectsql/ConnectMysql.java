@@ -8,7 +8,7 @@ import com.mysql.jdbc.Connection;
 
 public class ConnectMysql {
     
-    private final static String url = "jdbc:mysql://localhost:3306/supermarket";
+    private final static String url = "jdbc:mysql://localhost:3306/supermarket_app_web";
     private final static String user = "root";
     private final static String password = "tranhuy1";
     public Connection connection;

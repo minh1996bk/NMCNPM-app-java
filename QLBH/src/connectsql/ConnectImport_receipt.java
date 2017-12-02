@@ -5,6 +5,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.swing.JOptionPane;
+
 import com.mysql.jdbc.Statement;
 import model.ImportReceipt;
 import model.Product;
@@ -54,6 +57,20 @@ public class ConnectImport_receipt extends ConnectMysql {
         }
         return result;
 	}
+	public ResultSet getData_importforstsatistic() {
+        ResultSet result = null;
+        String sqlCommand = "select product.name, receipt_manager_supplier.date , product.total ,product.price from " + tableimport_receipt +","+tablereceipt_manager_supplier+","+tableproduct+ " where import_receipt.id_receipt = receipt_manager_supplier.id_receipt and import_receipt.id_product = product.id ";
+        Statement st ;
+        try {
+            st = (Statement) connection.createStatement();
+            result = st.executeQuery(sqlCommand);
+            System.out.println("GetData import_receipt details Correct ");
+        } catch (SQLException ex) {
+            Logger.getLogger(ConnectImport_receipt.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Select ERROR \n" + ex.toString());
+        }
+        return result;
+	}
     public void insertDB_importReceipt(ImportReceipt i, Product p){
         String sqlCommand = "insert into "+ tableimport_receipt +" value(? ,? ,? ,?)";
         PreparedStatement pst = null;
@@ -67,12 +84,14 @@ public class ConnectImport_receipt extends ConnectMysql {
             
             int row = pst.executeUpdate();
             if(row>0){
-                System.out.println("Inserted one of all to DataBase");
+                JOptionPane.showMessageDialog(null, "Insert successful");
             }else{
-                System.out.println("Insert Error");
+            	JOptionPane.showMessageDialog(null, "Insert ERROR", "alert", JOptionPane.ERROR_MESSAGE);
+
             }
         } catch (SQLException ex) {
             Logger.getLogger(ConnectImport_receipt.class.getName()).log(Level.SEVERE, null, ex);
+        	JOptionPane.showMessageDialog(null, "Insert ERROR", "alert", JOptionPane.ERROR_MESSAGE);
             System.out.println("Insert Import_ReceiptERROR");
         }
     }
