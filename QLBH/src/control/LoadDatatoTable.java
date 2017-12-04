@@ -153,5 +153,26 @@ public class LoadDatatoTable {
 	/**
 	 * @return the money
 	 */
+	public void Loaddatatotable_Export(ResultSet rs) {
+		// TODO Auto-generated method stub
+        ((DefaultTableModel)table.getModel()).setNumRows(0);
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        try {
+            while(rs.next()){
+                Object row[] = new Object[6];
+                row[0]= rs.getObject(1);
+                row[1]= rs.getObject(2);
+                row[2]= rs.getObject(3);
+                row[3]= rs.getObject(4);
+                row[4]= rs.getObject(5);
+                row[5]= rs.getObject(6);
+  
+                model.addRow(row);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(LoadDatatoTable.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Loadata function ERROR");
+        }
+	}
 
 }

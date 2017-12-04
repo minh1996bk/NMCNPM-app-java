@@ -21,6 +21,9 @@ public class ConnectMysql {
     public final static String tablesupplier = "supplier";
     public final static String tableimport_receipt = "import_receipt";
     public final static String tablereceipt_manager_supplier = "receipt_manager_supplier";
+    public final static String tableexport_receipt = "export_receipt";
+    public final static String tablereceipt_item = "receipt_item";
+    
     public void Connect(){
         try {
             Class.forName("com.mysql.jdbc.Driver");

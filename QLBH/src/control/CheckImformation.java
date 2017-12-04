@@ -70,4 +70,16 @@ public class CheckImformation {
 		}
 		return false;
 	}
+	public boolean CheckProductIDInTable(String str1,JTable table) {
+		int row = table.getRowCount();
+		int i=0;
+		while(i< row) {
+			if(str1.equals(String.valueOf(table.getModel().getValueAt(i, 1)))) {
+				JOptionPane.showMessageDialog(null, "This product is exist in table");
+				return true;
+			}
+			i++;
+		}
+		return false;
+	}
 }

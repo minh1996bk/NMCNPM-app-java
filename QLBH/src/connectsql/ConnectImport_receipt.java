@@ -44,6 +44,7 @@ public class ConnectImport_receipt extends ConnectMysql {
         return result;
     }
 	public ResultSet getData_importdetails() {
+		
         ResultSet result = null;
         String sqlCommand = "select import_receipt.id_receipt , employee.name , supplier.name , receipt_manager_supplier.date ,product.name , product.total ,product.price,product.produce_date,product.expire_date from " + tableimport_receipt +","+tablereceipt_manager_supplier+","+tableproduct+","+tablesupplier+","+tableemployee_manager+","+tableemployee+ " where import_receipt.id_receipt = receipt_manager_supplier.id_receipt and import_receipt.id_product = product.id and receipt_manager_supplier.id_supplier=supplier.id and receipt_manager_supplier.id_manager = employee_manager.id_manager and employee_manager.id_manager =employee.id ";
         Statement st ;
@@ -71,6 +72,22 @@ public class ConnectImport_receipt extends ConnectMysql {
         }
         return result;
 	}
+	
+	public ResultSet getData_importofmanager(int id,String date) {
+        ResultSet result = null;
+        String sqlCommand = "select product.id , product.name, product.price , product.producer , product.produce_date , product.expire_date , product.total from " + tableimport_receipt +","+tablereceipt_manager_supplier+","+tableproduct+ " where import_receipt.id_receipt = receipt_manager_supplier.id_receipt and import_receipt.id_product = product.id and receipt_manager_supplier.id_manager = '" + id +"' and receipt_manager_supplier.date = '"+date+"' ";
+        Statement st ;
+        try {
+            st = (Statement) connection.createStatement();
+            result = st.executeQuery(sqlCommand);
+            System.out.println("GetData importofemployee Correct ");
+        } catch (SQLException ex) {
+            Logger.getLogger(ConnectImport_receipt.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Select ERROR \n" + ex.toString());
+        }
+        return result;
+	}
+
     public void insertDB_importReceipt(ImportReceipt i, Product p){
         String sqlCommand = "insert into "+ tableimport_receipt +" value(? ,? ,? ,?)";
         PreparedStatement pst = null;

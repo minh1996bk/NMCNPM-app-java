@@ -35,6 +35,7 @@ import com.toedter.calendar.JDateChooser;
 import connectsql.ConnectImport_receipt;
 import connectsql.Connectaccount;
 import connectsql.Connectemployee;
+import connectsql.Connectexport_receipt;
 import connectsql.Connectproduct;
 
 import javax.swing.DefaultComboBoxModel;
@@ -78,6 +79,12 @@ public class ManagerFrame extends JFrame {
 	private JComboBox<String> combox_statistic;
 	private JMonthChooser monthChooser;
 	private JYearChooser yearChooser;
+	private JTextField import_name;
+	private JTextField export_name;
+	private JTable tableexport;
+	private JButton btnshowallexport;
+	private JDateChooser exportdate;
+	private JButton btnfindexport;
 
 	/**
 	 * Launch the application.
@@ -713,7 +720,11 @@ public class ManagerFrame extends JFrame {
 			}
 		});
 		
-		JButton btnNewButton_8 = new JButton("In ra file");
+		JLabel lblNgiNhpKho = new JLabel("Người nhập kho");
+		lblNgiNhpKho.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		import_name = new JTextField();
+		import_name.setColumns(10);
 		GroupLayout gl_panel_3 = new GroupLayout(panel_3);
 		gl_panel_3.setHorizontalGroup(
 			gl_panel_3.createParallelGroup(Alignment.LEADING)
@@ -725,33 +736,37 @@ public class ManagerFrame extends JFrame {
 								.addGroup(gl_panel_3.createSequentialGroup()
 									.addComponent(lblNewLabel_3, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
 									.addGap(18)
-									.addComponent(dateimport, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
-									.addGap(31)
-									.addComponent(btnTmKim, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE))
-								.addComponent(btnShowallimport, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)))
+									.addComponent(dateimport, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE))
+								.addComponent(btnShowallimport, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_panel_3.createSequentialGroup()
+									.addComponent(lblNgiNhpKho, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(import_name, GroupLayout.PREFERRED_SIZE, 143, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(btnTmKim, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE))))
 						.addGroup(gl_panel_3.createSequentialGroup()
 							.addGap(21)
-							.addGroup(gl_panel_3.createParallelGroup(Alignment.TRAILING)
-								.addComponent(btnNewButton_8)
-								.addComponent(scrollPane_4, GroupLayout.PREFERRED_SIZE, 803, GroupLayout.PREFERRED_SIZE))))
+							.addComponent(scrollPane_4, GroupLayout.PREFERRED_SIZE, 803, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap(24, Short.MAX_VALUE))
 		);
 		gl_panel_3.setVerticalGroup(
 			gl_panel_3.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panel_3.createSequentialGroup()
-					.addGap(36)
+					.addContainerGap()
 					.addGroup(gl_panel_3.createParallelGroup(Alignment.TRAILING)
-						.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING, false)
-							.addComponent(dateimport, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(lblNewLabel_3, GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE))
-						.addComponent(btnTmKim, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+						.addGroup(gl_panel_3.createParallelGroup(Alignment.BASELINE)
+							.addComponent(lblNgiNhpKho, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
+							.addComponent(btnTmKim, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE))
+						.addComponent(import_name, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
+					.addGap(9)
+					.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(dateimport, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(lblNewLabel_3, GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
 					.addComponent(btnShowallimport, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
 					.addComponent(scrollPane_4, GroupLayout.PREFERRED_SIZE, 312, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnNewButton_8, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap())
+					.addGap(51))
 		);
 		
 		importtable = new JTable();
@@ -771,49 +786,78 @@ public class ManagerFrame extends JFrame {
 		JLabel lblNewLabel_4 = new JLabel("Xuất Kho Ngày");
 		lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		JDateChooser dateChooser_1 = new JDateChooser();
+		exportdate = new JDateChooser();
 		
-		JButton btnNewButton_3 = new JButton("Tìm kiếm");
+		btnfindexport = new JButton("Tìm kiếm");
+		btnfindexport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnfindexportActionperformed(e);
+			}
+		});
 		
-		JButton btnNewButton_6 = new JButton("Xem tất cả");
+		btnshowallexport = new JButton("Xem tất cả");
+		btnshowallexport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnshowallexportActionPerformed(e);
+			}
+		});
 		
 		JScrollPane scrollPane_5 = new JScrollPane();
 		
-		JButton btnNewButton_1 = new JButton("In ra file ");
+		JLabel lblNgiXutKho = new JLabel("Người xuất kho");
+		lblNgiXutKho.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		export_name = new JTextField();
+		export_name.setColumns(10);
 		GroupLayout gl_panel_4 = new GroupLayout(panel_4);
 		gl_panel_4.setHorizontalGroup(
 			gl_panel_4.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_4.createSequentialGroup()
 					.addGap(78)
 					.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnNewButton_6, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)
+						.addComponent(scrollPane_5, GroupLayout.PREFERRED_SIZE, 696, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnshowallexport, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)
 						.addGroup(gl_panel_4.createSequentialGroup()
 							.addComponent(lblNewLabel_4, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(dateChooser_1, GroupLayout.PREFERRED_SIZE, 167, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnNewButton_3, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_panel_4.createParallelGroup(Alignment.TRAILING)
-							.addComponent(btnNewButton_1)
-							.addComponent(scrollPane_5, GroupLayout.PREFERRED_SIZE, 696, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(exportdate, GroupLayout.PREFERRED_SIZE, 167, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel_4.createSequentialGroup()
+							.addComponent(lblNgiXutKho, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(export_name, GroupLayout.PREFERRED_SIZE, 190, GroupLayout.PREFERRED_SIZE)
+							.addGap(32)
+							.addComponent(btnfindexport, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap(74, Short.MAX_VALUE))
 		);
 		gl_panel_4.setVerticalGroup(
 			gl_panel_4.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_4.createSequentialGroup()
-					.addGap(59)
-					.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(btnNewButton_3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(lblNewLabel_4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(dateChooser_1, GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
 					.addGap(18)
-					.addComponent(btnNewButton_6, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(scrollPane_5, GroupLayout.PREFERRED_SIZE, 303, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(btnNewButton_1, GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
-					.addContainerGap())
+					.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(btnfindexport, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addGroup(gl_panel_4.createParallelGroup(Alignment.BASELINE)
+							.addComponent(lblNgiXutKho, GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+							.addComponent(export_name, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)))
+					.addPreferredGap(ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+					.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(lblNewLabel_4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(exportdate, GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
+					.addGap(18)
+					.addComponent(btnshowallexport, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(scrollPane_5, GroupLayout.PREFERRED_SIZE, 322, GroupLayout.PREFERRED_SIZE)
+					.addGap(37))
 		);
+		
+		tableexport = new JTable();
+		tableexport.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"M\u00E3 xu\u1EA5t kho", "Ng\u01B0\u1EDDi xu\u1EA5t kho", "Th\u1EDDi gian ", "M\u1EB7t h\u00E0ng ", "Gi\u00E1 m\u1EB7t h\u00E0ng", "S\u1ED1 l\u01B0\u1EE3ng"
+			}
+		));
+		scrollPane_5.setViewportView(tableexport);
 		panel_4.setLayout(gl_panel_4);
 		
 		JPanel panel_5 = new JPanel();
@@ -906,6 +950,34 @@ public class ManagerFrame extends JFrame {
 		panel_5.setLayout(gl_panel_5);
 		contentPane.setLayout(gl_contentPane);
 	}
+	//find export depend on input
+	protected void btnfindexportActionperformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+        if(exportdate.getDate()== null && export_name.getText().equals("")){
+            JOptionPane.showMessageDialog(null,"You must choose date or enter name in the textfield");
+        }if(exportdate.getDate()!= null && export_name.getText().equals("")){
+        	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        	String str = sdf.format(exportdate.getDate());
+        	FindData find = new FindData( tableexport,str);
+        	find.finddata_Export_date();
+        }if(exportdate.getDate()==null && !export_name.getText().equals("")) {
+        	FindData find = new FindData(tableexport, export_name.getText());
+        	find.finddata_Export_name();
+        }if(exportdate.getDate()!=null && !export_name.getText().equals("")) {
+        	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        	String str = sdf.format(exportdate.getDate());
+        	FindData find = new FindData(tableexport,export_name.getText(),str);
+        	find.finddata_Export_namedate();
+        }
+	}
+	//show all export 
+	protected void btnshowallexportActionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		Connectexport_receipt connectexport_receipt = new Connectexport_receipt();
+		connectexport_receipt.Connect();
+		LoadDatatoTable load = new LoadDatatoTable(tableexport);
+		load.Loaddatatotable_Export(connectexport_receipt.getData_exportdetails());
+	}
 	//btn export to excel 
 	protected void btnExporttoExcelFileActionperformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
@@ -935,16 +1007,24 @@ public class ManagerFrame extends JFrame {
 			
 		}
 	}
-	//find import depend on date
+	//find import depend on input
 	protected void findimportActionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-        if(dateimport.getDate()== null){
-            JOptionPane.showMessageDialog(null,"You must choose date");
-        }else{
+        if(dateimport.getDate()== null && import_name.getText().equals("")){
+            JOptionPane.showMessageDialog(null,"You must choose date or enter name in the textfield");
+        }if(dateimport.getDate()!= null && import_name.getText().equals("")){
         	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         	String str = sdf.format(dateimport.getDate());
         	FindData find = new FindData( importtable,str);
-        	find.finddata_Import();
+        	find.finddata_Import_date();
+        }if(dateimport.getDate()==null && !import_name.getText().equals("")) {
+        	FindData find = new FindData(importtable, import_name.getText());
+        	find.finddata_Import_name();
+        }if(dateimport.getDate()!=null && !import_name.getText().equals("")) {
+        	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        	String str = sdf.format(dateimport.getDate());
+        	FindData find = new FindData(importtable,import_name.getText(),str);
+        	find.finddata_Import_namedate();
         }
 		
 	}

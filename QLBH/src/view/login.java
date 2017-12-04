@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import connectsql.Connectaccount;
 import control.RemmeberAccount;
 import model.Account;
+import model.Employee;
 import model.Userlogin;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -167,7 +168,14 @@ public class login extends JFrame {
                 	mainm.setVisible(true);
                 	this.dispose();
                 }else {
-                	EmployeeFrame maine = new EmployeeFrame();
+                	ResultSet resultset = ConnectMySQL.getEmployee(text_account.getText());
+                	Employee e = new Employee();
+                	while(resultset.next()) {
+	                	e.setIdNumber(resultset.getInt(1));
+	                	e.setName(resultset.getString(2));
+                	}
+                	System.out.println(e.getIdNumber());
+                	EmployeeFrame maine = new EmployeeFrame(e);
                 	maine.setVisible(true);
                 	this.dispose();
                 }

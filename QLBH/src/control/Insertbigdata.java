@@ -8,6 +8,8 @@ import javax.swing.JTable;
 
 import connectsql.ConnectImport_receipt;
 import connectsql.Connectproduct;
+import connectsql.Connectreceipt_item;
+import model.ExportReceipt;
 import model.ImportReceipt;
 import model.Product;
 
@@ -41,6 +43,26 @@ public class Insertbigdata {
 			count++;
 		}
 	}
+	//Insert all receipt_item in table
+	public void insertallreceipt_item(ExportReceipt exp) {
+		Connectreceipt_item con = new Connectreceipt_item();
+		con.Connect();
+		int row = table.getRowCount();
+		if(row == 0) {
+			JOptionPane.showMessageDialog(null, "No data in export table");
+		}else {
+			int count = 0;
+			while(count<row) {
+				Product pr = new Product();
+				pr.setIdNumber(Integer.parseInt(String.valueOf(table.getModel().getValueAt(count, 0))));
+				pr.setName(String.valueOf(table.getModel().getValueAt(count, 1)));
+				pr.setPrice((Integer.parseInt(String.valueOf(table.getModel().getValueAt(count, 2)))));
+				pr.setTotal((Integer.parseInt(String.valueOf(table.getModel().getValueAt(count, 3)))));
+				con.insertDB_Receiptitem(exp, pr);
+				count++;
+			}
+		}
+	}
 	//insert importreceipt to importreceipt
 	public void insertImportReceipt(ImportReceipt importReceipt) {
 		ConnectImport_receipt con = new ConnectImport_receipt();
@@ -52,7 +74,7 @@ public class Insertbigdata {
 			con.insertDB_importReceipt(importReceipt, p);
 			count++;
 		}
-		JOptionPane.showMessageDialog(null, "Inserted all to Import receipt");
+		JOptionPane.showMessageDialog(null, "Insert Sucessful");
 	}
 	/**
 	 * @return the table

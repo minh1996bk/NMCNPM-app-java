@@ -156,8 +156,7 @@ public class Connectaccount extends ConnectMysql {
     	input.setMatKhau(textPass.getText());
     	try {
             while(rs.next()){	
-            	if(input.getTaiKhoan().equals(rs.getString(2)) &&
-                    input.getMatKhau().equals(rs.getString(3))){
+            	if(input.getTaiKhoan().equals(rs.getString(2))){
                     return true;
                     }
             }
@@ -165,5 +164,20 @@ public class Connectaccount extends ConnectMysql {
             Logger.getLogger(Connectaccount.class.getName()).log(Level.SEVERE, null, ex);
         }
 		return false;
+	}
+	
+	public ResultSet getEmployee(String account) {
+        ResultSet result = null;
+        String sqlCommand = "select employee.id , employee.name from " + tableemployee +","+ tableaccount +" where account.id_employee = employee.id and user_name = '" +account+ "'" ;
+        Statement st ;
+        try {
+            st = (Statement) connection.createStatement();
+            result = st.executeQuery(sqlCommand);
+            System.out.println("GetData Account Correct ");
+        } catch (SQLException ex) {
+            Logger.getLogger(Connectaccount.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Select ERROR \n" + ex.toString());
+        }
+        return result;
 	}
 }

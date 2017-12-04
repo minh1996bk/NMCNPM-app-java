@@ -10,12 +10,12 @@ import javax.swing.JOptionPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextField;
 import com.toedter.calendar.JDateChooser;
-
 import connectsql.ConnectImport_receipt;
 import connectsql.ConnectReceipt_manager_supplier;
 import connectsql.Connectsupplier;
 import control.CheckImformation;
 import control.Export;
+import control.Getimportactiontotable;
 import control.Insertbigdata;
 import control.LoadDatatoTable;
 import control.Selectidintable;
@@ -23,10 +23,8 @@ import model.ImportReceipt;
 import model.Manager;
 import model.Product;
 import model.Supplier;
-
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-
 import java.awt.Desktop;
 import java.awt.Font;
 import javax.swing.SwingConstants;
@@ -67,7 +65,7 @@ public class AddImportReceipt1 extends JFrame {
 	private JButton btnUpdateproduct;
 	private JButton btnDeleteproduct;
 	private JLabel total_1;
-
+	private JButton btnprintimport;
 	/**
 	 * Launch the application.
 	 */
@@ -78,7 +76,7 @@ public class AddImportReceipt1 extends JFrame {
 	public AddImportReceipt1(Manager manager ,ManagerFrame frame) {
 		this.manager = manager;
 		this.frame = frame;
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setBounds(100, 100, 1005, 660);
 		contentPane = new JPanel();
@@ -188,7 +186,12 @@ public class AddImportReceipt1 extends JFrame {
 		
 		total_1 = new JLabel("");
 		
-		JButton btnprintimport = new JButton("");
+		btnprintimport = new JButton("In hóa đơn");
+		btnprintimport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				btnprintimportActionPerformed(arg0);
+			}
+		});
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -242,32 +245,43 @@ public class AddImportReceipt1 extends JFrame {
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(lblSinThoi, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(supplier_phone, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE)))
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(btnImportproduct)
+								.addComponent(supplier_phone, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE))))
 					.addPreferredGap(ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 690, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(706)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-							.addComponent(btnImportproduct)
-							.addPreferredGap(ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
-							.addComponent(btnprintimport, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(btnExit, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE))
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 690, GroupLayout.PREFERRED_SIZE)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(lblNewLabel_2, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(total_1, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap())
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGap(26)
+									.addComponent(btnprintimport, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(btnExit, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(lblNewLabel_2, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(total_1, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE)))
+							.addContainerGap())))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 501, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(total_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(lblNewLabel_2, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(btnExit, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
+								.addComponent(btnprintimport, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(19)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(product_name, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(product_name)
 								.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE))
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
@@ -311,18 +325,9 @@ public class AddImportReceipt1 extends JFrame {
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 								.addComponent(lblSinThoi, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
-								.addComponent(supplier_phone, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)))
-						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 501, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(total_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(lblNewLabel_2, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-							.addComponent(btnExit, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-							.addComponent(btnImportproduct, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
-						.addComponent(btnprintimport, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
+								.addComponent(supplier_phone, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
+							.addComponent(btnImportproduct, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap(19, Short.MAX_VALUE))
 		);
 		
@@ -338,32 +343,37 @@ public class AddImportReceipt1 extends JFrame {
 		contentPane.setLayout(gl_contentPane);
 	}
 	
-//	//printfReceipt of importing
-//	protected void PrintfReceiptActionPerformed(ActionEvent arg0) {
-//		// TODO Auto-generated method stub
-//        if (table.getRowCount() == 0) {
-//			JOptionPane.showMessageDialog(null, "Table dont have data", "Notification", JOptionPane.WARNING_MESSAGE );
-//            return;
-//        }
-//        String name = "Các sản phẩm nhập kho và tổng giá trị";
-//        String sum = total.getText();
-//        JFileChooser fcs = new JFileChooser();
-//        if (fcs.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-//            String path = fcs.getSelectedFile().getAbsolutePath();
-//            if (Export.printreport(table, path, name, manager.getName(),sum )) {
-//                JOptionPane.showMessageDialog(null, "Successful !");
-//                try {
-//                    Desktop.getDesktop().open(new File(path + ".pdf"));
-//                } catch (IOException ex) {
-//                    Logger.getLogger(AddImportReceipt.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//            } else {
-//                JOptionPane.showMessageDialog(null, "Print ERROR !");
-//            }
-//        }
-//        money = 0;
-//		((DefaultTableModel)table.getModel()).setNumRows(0);
-//	}
+	protected void btnprintimportActionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		JTable tableofemployee = new JTable();
+		java.util.Date today = new java.util.Date();
+		//get all import action of this manager and conver to table
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String date = sdf.format(today);
+		Getimportactiontotable importaction = new Getimportactiontotable(manager, date);
+		tableofemployee = importaction.getdata();
+		String sum = String.valueOf(importaction.Sumofall());
+		if (tableofemployee.getRowCount() == 0) {
+			JOptionPane.showMessageDialog(null, "No importing of you on today", "Notification", JOptionPane.WARNING_MESSAGE );
+			return;
+		}
+		String name = "Các sản phẩm nhập kho và tổng giá trị";
+		JFileChooser fcs = new JFileChooser();
+		if (fcs.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+			String path = fcs.getSelectedFile().getAbsolutePath();
+			if (Export.printreport(tableofemployee, path, name, manager.getName(),sum )) {
+				JOptionPane.showMessageDialog(null, "Successful !");
+				try {
+					Desktop.getDesktop().open(new File(path + ".pdf"));
+				} catch (IOException ex) {
+					Logger.getLogger(AddImportReceipt1.class.getName()).log(Level.SEVERE, null, ex);
+				}
+			} else {
+				JOptionPane.showMessageDialog(null, "Print ERROR !");
+			}
+		}
+	}
+
 	//btn import
 	protected void btnImportproductActionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -383,6 +393,7 @@ public class AddImportReceipt1 extends JFrame {
 				return;
 			}
 			else {
+				DefaultTableModel model = (DefaultTableModel) table.getModel();
 				Insertbigdata insertall = new Insertbigdata(table);
 				supplier = new model.Supplier(connectsupplier.SelectID(connectsupplier.getData_supplier()),supplier_name.getText(),supplier_address.getText(),supplier_mail.getText(),supplier_phone.getText());
 				//set values for importreceipt
@@ -399,26 +410,8 @@ public class AddImportReceipt1 extends JFrame {
 				crmp.insertDB_Receipt_manager_supplier(ir);
 				//insert to import_receipt 
 				insertall.insertImportReceipt(ir);
-		        String name = "Các sản phẩm nhập kho và tổng giá trị";
-		        String sum = total_1.getText();
-		        JFileChooser fcs = new JFileChooser();
-		        if (fcs.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-		            String path = fcs.getSelectedFile().getAbsolutePath();
-		            if (Export.printreport(table, path, name, manager.getName(),sum )) {
-		                JOptionPane.showMessageDialog(null, "Successful !");
-		                try {
-		                    Desktop.getDesktop().open(new File(path + ".pdf"));
-		                } catch (IOException ex) {
-		                    Logger.getLogger(AddImportReceipt1.class.getName()).log(Level.SEVERE, null, ex);
-		                }
-		            } else {
-		                JOptionPane.showMessageDialog(null, "Print ERROR !");
-		            }
-		        }
-				product_name.setText("");product_price.setText("");product_total.setText("");product_expiredate.setDate(null);product_producedate.setDate(null);product_producer.setText("");
-		        money = 0;
-		        total_1.setText("");
-				((DefaultTableModel)table.getModel()).setNumRows(0);
+				model.setNumRows(0);
+				product_name.setText("");product_price.setText("");product_expiredate.setDate(null);product_producedate.setToolTipText("");product_producer.setText("");product_total.setText("");
 			}	
 		}
 	}

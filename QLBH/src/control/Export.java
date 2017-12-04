@@ -85,7 +85,7 @@ public class Export {
 	        }
 	        return isSuccess;
 	    }
-
+	    
 	    public static boolean printreport(JTable table, String path, String name, String Admin,String total) {
 	        boolean isSuccess = false;
 	        try {
@@ -112,7 +112,7 @@ public class Export {
 	            document.add(new Paragraph(" ", fontChung));
 	            PdfPTable table2 = getTable(table);
 	            document.add(table2);
-	            document.add(new Paragraph("                                                                Tổng Giá trị: " +total,fontChung));
+	            document.add(new Paragraph("                                                               Tổng Giá trị: " +total,fontChuKy));
 	            document.add(new Paragraph(" ", fontChung));
 	            document.add(new Paragraph(" ", fontChung));
 	            document.add(new Paragraph(" ", fontChung));
@@ -126,7 +126,44 @@ public class Export {
 
 	        return isSuccess;
 	    }
+	    public static boolean printforcustomer(JTable table, String path,String Customer,String total) {
+	        boolean isSuccess = false;
+	        try {
+	            BaseFont bf1 = BaseFont.createFont("vuTimes.ttf", BaseFont.IDENTITY_H, true);
+	            Document document = new Document();
+	            PdfWriter.getInstance(document, new FileOutputStream(path + ".pdf"));
+	            document.open();
+	            Font fontName = new Font(bf1, 35, Font.BOLD, BaseColor.RED);
+	            Font fontTieuDe = new Font(bf1, 20, Font.BOLD, BaseColor.BLACK);
+	            Font fontChung = new Font(bf1, 14, Font.NORMAL, BaseColor.BLACK);
+	            Font fontChuKy = new Font(bf1, 16, Font.BOLD, BaseColor.BLACK);
+	            Font fontLienLac = new Font(bf1, 8, Font.UNDEFINED, BaseColor.BLACK);
+	            document.add(new Paragraph("                     HÓA ĐƠN ", fontName));
+	            document.add(new Paragraph(" ", fontChuKy));
+	            document.add(new Paragraph("Cửa Hàng Quần Áo Thời Trang_ Boutique_69 Trần Đại Nghĩa                                                                                                                                                                                                      SĐT: 0973248051", fontLienLac));
+	            document.add(new Paragraph("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------", fontLienLac));
+	            document.add(new Paragraph("                                     Danh sách vật phẩm", fontTieuDe));
+	            document.add(new Paragraph("                               ", fontTieuDe));
+	            document.add(new Paragraph("Tên khách hàng : " + Customer, fontChung));
+	            document.add(new Paragraph("Ngày                  : " + new java.sql.Date(new Date().getTime()), fontChung));
+	            document.add(new Paragraph(" ", fontChung));
+	            document.add(new Paragraph(" ", fontChung));
+	            PdfPTable table2 = getTable(table);
+	            document.add(table2);
+	            document.add(new Paragraph("                                                                   Tổng Giá trị: " +total,fontChuKy));
+	            document.add(new Paragraph(" ", fontChung));
+	            document.add(new Paragraph(" ", fontChung));
+	            document.add(new Paragraph(" ", fontChung));
+	            document.add(new Paragraph("                                                                     Chữ ký cán bộ và đóng dấu ", fontChuKy));
+	            document.close();
+	            isSuccess = true;
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            isSuccess = false;
+	        }
 
+	        return isSuccess;
+	    }
 	    public void ExporttoExcel(JTable table) {
 	        JFileChooser chooser = new JFileChooser();
 	        int i = chooser.showSaveDialog(chooser);
