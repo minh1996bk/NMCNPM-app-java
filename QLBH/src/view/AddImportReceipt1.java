@@ -411,7 +411,7 @@ public class AddImportReceipt1 extends JFrame {
 				//insert to import_receipt 
 				insertall.insertImportReceipt(ir);
 				model.setNumRows(0);
-				product_name.setText("");product_price.setText("");product_expiredate.setDate(null);product_producedate.setToolTipText("");product_producer.setText("");product_total.setText("");
+				product_name.setText("");product_price.setText("");product_expiredate.setDate(null);product_producedate.setDate(null);;product_producedate.setToolTipText("");product_producer.setText("");product_total.setText("");
 			}	
 		}
 	}

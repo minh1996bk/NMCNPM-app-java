@@ -52,7 +52,7 @@ public class Updateproduct extends JFrame {
 	public Updateproduct(Product product , ManagerFrame frame) {
 		this.product = product;
 		this.frame = frame;
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(this);
 		setBounds(100, 100, 540, 620);
 		contentPane = new JPanel();

@@ -411,14 +411,14 @@ public class ManagerFrame extends JFrame {
 		employee_position = new JComboBox<String>();
 		employee_position.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(employee_position.getSelectedItem().equals("employee")) {
+				if(employee_position.getSelectedItem().equals("employee")||employee_position.getSelectedItem().equals("shipper")) {
 					employee_commission.setEnabled(false);
 				}else {
 					employee_commission.setEnabled(true);
 				}
 			}
 		});
-		employee_position.setModel(new DefaultComboBoxModel<String>(new String[] {"", "employee", "manager"}));
+		employee_position.setModel(new DefaultComboBoxModel<String>(new String[] {"", "employee", "manager", "shipper"}));
 		
 		JButton CreatAccout = new JButton("Thêm tài khoản");
 		CreatAccout.addActionListener(new ActionListener() {
@@ -1182,6 +1182,10 @@ public class ManagerFrame extends JFrame {
 					Manager manager = new Manager(id,employee_name.getText(),male,Date.valueOf(date),employee_adress.getText(),employee_phone.getText(),Integer.parseInt(employee_salary.getText()),position,Integer.parseInt(employee_commission.getText()));
 					connectemployee.insertDB_employee(manager);
 					connectemployee.insertDB_employeemanager(manager);
+				}
+				if(String.valueOf(employee_position.getSelectedItem()).equals("shipper")){
+					Employee employee = new Employee(id,employee_name.getText(),male,Date.valueOf(date),employee_adress.getText(),employee_phone.getText(),Integer.parseInt(employee_salary.getText()),position);
+					connectemployee.insertDB_employee(employee);	
 				}
 			}	
 		}

@@ -55,7 +55,7 @@ public class Updateemployee extends JFrame {
 	public Updateemployee(Employee employee,ManagerFrame frame) {
 		this.employee = employee;
 		this.frame = frame;
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(this);
 		setBounds(100, 100, 560, 587);
 		contentPane = new JPanel();

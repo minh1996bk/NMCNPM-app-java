@@ -39,14 +39,14 @@ import java.awt.Desktop;
 import java.awt.Font;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-
+import javax.swing.JComboBox;
 public class EmployeeFrame extends JFrame {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
+	private JPanel contentPane1;
 	private JTextField textUser;
 	private JTextField textToday;
 	private Employee employee;
@@ -57,6 +57,10 @@ public class EmployeeFrame extends JFrame {
 	private JButton btndeletexport;
 	private JButton btnfindproduct;
 	private JButton btnexport;
+	private JTextField textFrom;
+	private JTextField textTo;
+	private JTextField textfind;
+	private JTable table;
 	
 	/**
 	 * Launch the application.
@@ -71,9 +75,9 @@ public class EmployeeFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setBounds(100, 100, 1083, 692);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
+		contentPane1 = new JPanel();
+		contentPane1.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane1);
 		
 		JLabel lblNewLabel = new JLabel("Ng\u01B0\u1EDDi d\u00F9ng");
 		
@@ -229,12 +233,94 @@ public class EmployeeFrame extends JFrame {
 		scrollPane_1.setViewportView(tableallproduct);
 		panel_2.setLayout(gl_panel_2);
 		
-		JPanel panel_1 = new JPanel();
-		tabbedPane.addTab("Xuất kho online", null, panel_1, null);
+		JPanel contentPane = new JPanel();
+		/////
+	    
+		/////
+		tabbedPane.addTab("Xuất kho online", null, contentPane, null);
+		
+		JLabel lblNewLabel_2 = new JLabel("From");
+		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		textFrom = new JTextField();
+		textFrom.setColumns(10);
+		
+		JLabel lblTo = new JLabel("to");
+		lblTo.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		textTo = new JTextField();
+		textTo.setColumns(10);
+		
+		JComboBox statusCombox = new JComboBox();
+		
+		JButton btnUpdate = new JButton("Update");
+		
+		textfind = new JTextField();
+		textfind.setColumns(10);
+		
+		JButton btnFind = new JButton("Find");
+		
+		JScrollPane scrollPane_2 = new JScrollPane();
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(lblNewLabel_2, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(textFrom, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(lblTo, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(textTo, GroupLayout.PREFERRED_SIZE, 175, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(statusCombox, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(btnUpdate)
+							.addGap(33)
+							.addComponent(textfind, GroupLayout.PREFERRED_SIZE, 178, GroupLayout.PREFERRED_SIZE)
+							.addGap(31)
+							.addComponent(btnFind, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(50)
+							.addComponent(scrollPane_2, GroupLayout.PREFERRED_SIZE, 954, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+					.addGap(47)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addGroup(Alignment.LEADING, gl_contentPane.createParallelGroup(Alignment.BASELINE)
+							.addComponent(textFrom, GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
+							.addComponent(btnFind, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
+							.addComponent(lblTo, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+							.addComponent(textTo, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+							.addComponent(statusCombox, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
+							.addComponent(btnUpdate, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
+							.addComponent(textfind, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
+						.addComponent(lblNewLabel_2, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))
+					.addGap(44)
+					.addComponent(scrollPane_2, GroupLayout.PREFERRED_SIZE, 402, GroupLayout.PREFERRED_SIZE)
+					.addGap(70))
+		);
+		
+		table = new JTable();
+		table.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"ID", "Time", "Total", "Customer ", "Status"
+			}
+		));
+		scrollPane_2.setViewportView(table);
+		contentPane.setLayout(gl_contentPane);
+		GroupLayout gl_contentPane1 = new GroupLayout(contentPane1);
+		gl_contentPane1.setHorizontalGroup(
+			gl_contentPane1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane1.createSequentialGroup()
 					.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
 					.addGap(10)
 					.addComponent(textUser, GroupLayout.PREFERRED_SIZE, 123, GroupLayout.PREFERRED_SIZE)
@@ -249,10 +335,10 @@ public class EmployeeFrame extends JFrame {
 					.addContainerGap(63, Short.MAX_VALUE))
 				.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 1065, Short.MAX_VALUE)
 		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+		gl_contentPane1.setVerticalGroup(
+			gl_contentPane1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane1.createSequentialGroup()
+					.addGroup(gl_contentPane1.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
 						.addComponent(textUser, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblNgy, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
@@ -262,7 +348,7 @@ public class EmployeeFrame extends JFrame {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 614, Short.MAX_VALUE))
 		);
-		contentPane.setLayout(gl_contentPane);
+		contentPane1.setLayout(gl_contentPane1);
 		
 		Connectproduct con = new Connectproduct();
 		con.Connect();
