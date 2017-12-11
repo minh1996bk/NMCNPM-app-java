@@ -34,7 +34,7 @@ public class Addcommissionformanager extends JFrame {
 	public Addcommissionformanager(Manager manager,Updateemployee frame) {
 		this.manager = manager;
 		this.frame = frame;
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setBounds(100, 100, 371, 133);
 		contentPane = new JPanel();
@@ -99,9 +99,16 @@ public class Addcommissionformanager extends JFrame {
 			if(check.isNotCommission(manager_commission.getText())) {
 				return;
 			}else {
-				manager.setCommission(Integer.parseInt(manager_commission.getText()));
-				connectemployee.UpdateEmployee(manager.getIdNumber(), manager);
-				connectemployee.UpdateEmployee_manager(manager.getIdNumber(), manager);
+				//employee ->manager,employee is not exist in employee_manager table
+				if(connectemployee.Checkidinemployee_manager(connectemployee.getData_employee(), manager.getIdNumber())) {
+					manager.setCommission(Integer.parseInt(manager_commission.getText()));
+					connectemployee.UpdateEmployee(manager.getIdNumber(), manager);
+					connectemployee.insertDB_employeemanager(manager);
+				}else {//manager->employee ,manager is exist in employee_manager table
+					manager.setCommission(Integer.parseInt(manager_commission.getText()));
+					connectemployee.UpdateEmployee(manager.getIdNumber(), manager);
+					connectemployee.UpdateEmployee_manager(manager.getIdNumber(), manager);
+				}	
 				frame.setEnabled(true);
 				this.dispose();
 			}

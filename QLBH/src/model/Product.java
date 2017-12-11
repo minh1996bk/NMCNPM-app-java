@@ -1,19 +1,13 @@
 package model;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
 import javax.swing.JTable;
-import java.sql.Date;
+
 
 public class Product {
   private int idNumber;
   private String name;
   private int price;
-  private String producer;
-  private Date produceTime;
-  private Date expireTime;
   private int total;
   private JTable table;
   private int row;
@@ -21,13 +15,10 @@ public class Product {
   public Product() {
     
   }
-  public Product(int idNumber,String name,int price,String producer, Date produceTime,Date expireTime , int total){
+  public Product(int idNumber,String name,int price, int total){
 	  this.idNumber = idNumber;
 	  this.name = name;
 	  this.price = price;
-	  this.producer = producer;
-	  this.produceTime = produceTime;
-	  this.expireTime = expireTime;
 	  this.total = total;
   }
 
@@ -60,29 +51,6 @@ public int getIdNumber() {
     this.price = price;
   }
 
-  public String getProducer() {
-    return producer;
-  }
-
-  public void setProducer(String producer) {
-    this.producer = producer;
-  }
-
-  public Date getProduceTime() {
-    return produceTime;
-  }
-
-  public void setProduceTime(Date produceTime) {
-    this.produceTime = produceTime;
-  }
-
-  public Date getExpireTime() {
-    return expireTime;
-  }
-
-  public void setExpireTime(Date expireTime) {
-    this.expireTime = expireTime;
-  }
   
   /**
    * Method convert attributes of an instance of Product Class to String[].
@@ -90,9 +58,7 @@ public int getIdNumber() {
    */
   
   public String[] toArrayString() {
-    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-    String[] array = {"" + this.idNumber, this.name, "" + this.price, this.producer, 
-        df.format(this.produceTime), df.format(this.expireTime)};
+    String[] array = {"" + this.idNumber, this.name, "" + this.price,};
     return array;
   }
 
@@ -120,10 +86,7 @@ public int getIdNumber() {
 	    pr.setIdNumber( Integer.parseInt(String.valueOf(table.getModel().getValueAt(row, 0))));
 	    pr.setName((String.valueOf( table.getModel().getValueAt(row,1)))); 
 	    pr.setPrice((Integer.parseInt(String.valueOf( table.getModel().getValueAt(row,2)))));
-	    pr.setProducer(String.valueOf(table.getModel().getValueAt(row,3)));
-	    pr.setTotal(Integer.parseInt(String.valueOf(table.getModel().getValueAt(row,6))));
-		pr.setProduceTime(Date.valueOf(String.valueOf(table.getModel().getValueAt(row,4))));
-		pr.setExpireTime(Date.valueOf(String.valueOf(table.getModel().getValueAt(row,5))));
+	    pr.setTotal(Integer.parseInt(String.valueOf(table.getModel().getValueAt(row,3))));
 	    return pr;
 	}
 	
@@ -136,10 +99,7 @@ public int getIdNumber() {
 		    pr.setIdNumber( Integer.parseInt(String.valueOf(table.getModel().getValueAt(i, 0))));
 		    pr.setName((String.valueOf( table.getModel().getValueAt(i,1)))); 
 		    pr.setPrice((Integer.parseInt(String.valueOf( table.getModel().getValueAt(i,2)))));
-		    pr.setProducer(String.valueOf(table.getModel().getValueAt(i,3)));
-		    pr.setTotal(Integer.parseInt(String.valueOf(table.getModel().getValueAt(i,6))));
-			pr.setProduceTime(Date.valueOf(String.valueOf(table.getModel().getValueAt(i,4))));
-			pr.setExpireTime(Date.valueOf(String.valueOf(table.getModel().getValueAt(i,5))));
+		    pr.setTotal(Integer.parseInt(String.valueOf(table.getModel().getValueAt(i,3))));
 			arraylist.add(i, pr);
 			i++;
 		}

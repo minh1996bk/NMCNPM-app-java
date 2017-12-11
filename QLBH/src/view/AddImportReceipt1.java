@@ -9,7 +9,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextField;
-import com.toedter.calendar.JDateChooser;
 import connectsql.ConnectImport_receipt;
 import connectsql.ConnectReceipt_manager_supplier;
 import connectsql.Connectsupplier;
@@ -33,7 +32,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -52,10 +50,7 @@ public class AddImportReceipt1 extends JFrame {
 	private JPanel contentPane;
 	private JTextField product_name;
 	private JTextField product_price;
-	private JTextField product_producer;
 	private JTextField product_total;
-	private JDateChooser product_expiredate;
-	private JDateChooser product_producedate;
 	private JTextField supplier_name;
 	private JTextField supplier_address;
 	private JTextField supplier_mail;
@@ -66,6 +61,7 @@ public class AddImportReceipt1 extends JFrame {
 	private JButton btnDeleteproduct;
 	private JLabel total_1;
 	private JButton btnprintimport;
+	private JLabel lblMtHng;
 	/**
 	 * Launch the application.
 	 */
@@ -96,22 +92,6 @@ public class AddImportReceipt1 extends JFrame {
 		
 		product_price = new JTextField();
 		product_price.setColumns(10);
-		
-		JLabel lblNiSnXut = new JLabel("N\u01A1i s\u1EA3n xu\u1EA5t");
-		lblNiSnXut.setHorizontalAlignment(SwingConstants.CENTER);
-		
-		product_producer = new JTextField();
-		product_producer.setColumns(10);
-		
-		JLabel lblNgySnXut = new JLabel("Ng\u00E0y s\u1EA3n xu\u1EA5t");
-		lblNgySnXut.setHorizontalAlignment(SwingConstants.CENTER);
-		
-		product_producedate = new JDateChooser();
-		
-		JLabel lblHnSDng = new JLabel("H\u1EA1n s\u1EED d\u1EE5ng");
-		lblHnSDng.setHorizontalAlignment(SwingConstants.CENTER);
-		
-		product_expiredate = new JDateChooser();
 		
 		JLabel lblSLng = new JLabel("S\u1ED1 l\u01B0\u1EE3ng");
 		lblSLng.setHorizontalAlignment(SwingConstants.CENTER);
@@ -192,63 +172,64 @@ public class AddImportReceipt1 extends JFrame {
 				btnprintimportActionPerformed(arg0);
 			}
 		});
+		
+		lblMtHng = new JLabel("Mặt hàng");
+		lblMtHng.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(lblGiMtHng, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(product_name, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE)
-								.addComponent(product_price, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(lblNiSnXut, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(product_producer, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(lblNgySnXut, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(product_producedate, GroupLayout.PREFERRED_SIZE, 121, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(lblHnSDng, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(product_expiredate, GroupLayout.PREFERRED_SIZE, 121, GroupLayout.PREFERRED_SIZE))
-						.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-								.addComponent(btnAddproduct)
-								.addComponent(lblSLng, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGap(10)
-									.addComponent(btnUpdateproduct, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
+								.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+									.addContainerGap()
+									.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
 									.addGap(18)
-									.addComponent(btnDeleteproduct, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE))
-								.addComponent(product_total, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE)))
+									.addComponent(product_name, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addContainerGap()
+									.addComponent(lblGiMtHng, GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
+									.addGap(18)
+									.addComponent(product_price, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE))
+								.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(lblTn, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(supplier_name, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(lblaCh, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(supplier_address, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(lblGmail, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(supplier_mail, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(lblSinThoi, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(btnImportproduct)
+										.addComponent(supplier_phone, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE)))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addContainerGap()
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+										.addComponent(btnAddproduct)
+										.addComponent(lblSLng, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE))
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addGroup(gl_contentPane.createSequentialGroup()
+											.addGap(18)
+											.addComponent(product_total, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE))
+										.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+											.addGap(30)
+											.addComponent(btnUpdateproduct, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
+											.addGap(33)
+											.addComponent(btnDeleteproduct, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)))))
+							.addPreferredGap(ComponentPlacement.RELATED, 10, Short.MAX_VALUE))
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(lblTn, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(supplier_name, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(lblaCh, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(supplier_address, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(lblGmail, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(supplier_mail, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(lblSinThoi, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(btnImportproduct)
-								.addComponent(supplier_phone, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE))))
-					.addPreferredGap(ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+							.addContainerGap()
+							.addComponent(lblMtHng, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)))
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 690, GroupLayout.PREFERRED_SIZE)
 						.addGroup(gl_contentPane.createSequentialGroup()
@@ -279,35 +260,25 @@ public class AddImportReceipt1 extends JFrame {
 								.addComponent(btnExit, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
 								.addComponent(btnprintimport, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)))
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(19)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(product_name)
-								.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addContainerGap()
+							.addComponent(lblMtHng, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblGiMtHng, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
-								.addComponent(product_price, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addComponent(product_name, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblNiSnXut, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
-								.addComponent(product_producer, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(product_producedate, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(lblNgySnXut, GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-								.addComponent(lblHnSDng, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
-								.addComponent(product_expiredate, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblSLng, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
-								.addComponent(product_total, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
-							.addGap(13)
+								.addComponent(product_price, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblGiMtHng, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnAddproduct)
+								.addComponent(product_total, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblSLng, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
+							.addGap(28)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(btnDeleteproduct)
 								.addComponent(btnUpdateproduct)
-								.addComponent(btnDeleteproduct))
+								.addComponent(btnAddproduct))
 							.addGap(18)
 							.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
@@ -336,7 +307,7 @@ public class AddImportReceipt1 extends JFrame {
 			new Object[][] {
 			},
 			new String[] {
-				"M\u00E3 m\u1EB7t h\u00E0ng", "T\u00EAn m\u1EB7t h\u00E0ng", "Gi\u00E1 m\u1EB7t h\u00E0ng", "N\u01A1i s\u1EA3n xu\u1EA5t", "Ng\u00E0y s\u1EA3n xu\u1EA5t", "H\u1EA1n s\u1EED d\u1EE5ng", "S\u1ED1 l\u01B0\u1EE3ng"
+				"M\u00E3 m\u1EB7t h\u00E0ng", "T\u00EAn m\u1EB7t h\u00E0ng", "Gi\u00E1 m\u1EB7t h\u00E0ng", "S\u1ED1 l\u01B0\u1EE3ng"
 			}
 		));
 		scrollPane.setViewportView(table);
@@ -411,7 +382,7 @@ public class AddImportReceipt1 extends JFrame {
 				//insert to import_receipt 
 				insertall.insertImportReceipt(ir);
 				model.setNumRows(0);
-				product_name.setText("");product_price.setText("");product_expiredate.setDate(null);product_producedate.setDate(null);;product_producedate.setToolTipText("");product_producer.setText("");product_total.setText("");
+				product_name.setText("");product_price.setText("");product_total.setText("");
 			}	
 		}
 	}
@@ -448,9 +419,6 @@ public class AddImportReceipt1 extends JFrame {
 			model.removeRow(row);
 			product_name.setText(product.getName());
 			product_price.setText(String.valueOf(product.getPrice()));
-			product_producer.setText(product.getProducer());
-			product_producedate.setDate(product.getProduceTime());
-			product_expiredate.setDate(product.getExpireTime());
 			product_total.setText(String.valueOf(product.getTotal()));
 			money = money-Integer.parseInt(product_price.getText())*Integer.parseInt(product_total.getText());
 			total_1.setText(String.valueOf(money)+"VND");
@@ -459,7 +427,7 @@ public class AddImportReceipt1 extends JFrame {
 	//addproduct to Jtable
 	protected void btnAddproductActionperformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		if(product_name.getText().equals("")||product_price.getText().equals("")||product_producer.getText().equals("")||product_expiredate.getDate()==null||product_producedate.getDate()==null) {
+		if(product_name.getText().equals("")||product_price.getText().equals("")) {
 			JOptionPane.showMessageDialog(this, "You must enter all information");
 		}else {
 			CheckImformation check = new CheckImformation();
@@ -467,11 +435,8 @@ public class AddImportReceipt1 extends JFrame {
 			if(check.isNotNumeric(product_price.getText())||check.isNotNumeric(product_total.getText())) {
 				return;
 			}else {
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				String date1 = sdf.format(product_producedate.getDate());
-				String date2 = sdf.format(product_expiredate.getDate());
-				Product product = new Product(Selectidintable.getID(table),product_name.getText(),Integer.parseInt(product_price.getText()),product_producer.getText(),Date.valueOf(date1),Date.valueOf(date2),Integer.parseInt(product_total.getText()));
-				if(!check.CheckProductInTable(product.getName(),String.valueOf(product.getPrice()), String.valueOf(product.getProduceTime()), table)) {
+				Product product = new Product(Selectidintable.getID(table),product_name.getText(),Integer.parseInt(product_price.getText()),Integer.parseInt(product_total.getText()));
+				if(!check.CheckProductInTable(product.getName(),String.valueOf(product.getPrice()), table)) {
 					money = money+Integer.parseInt(product_price.getText())*Integer.parseInt(product_total.getText());
 					total_1.setText(String.valueOf(money)+"VND");
 				}

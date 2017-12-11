@@ -15,7 +15,6 @@ import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
-
 import control.CheckImformation;
 import control.Export;
 import control.FindData;
@@ -25,23 +24,22 @@ import control.statistic;
 import model.Employee;
 import model.Manager;
 import model.Product;
-
 import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.awt.event.ActionEvent;
 import com.toedter.calendar.JDateChooser;
-
 import connectsql.ConnectImport_receipt;
 import connectsql.Connectaccount;
 import connectsql.Connectemployee;
 import connectsql.Connectexport_receipt;
 import connectsql.Connectproduct;
-
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.SwingConstants;
 import com.toedter.calendar.JMonthChooser;
 import com.toedter.calendar.JYearChooser;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseEvent;
 
 public class ManagerFrame extends JFrame {
 
@@ -67,10 +65,7 @@ public class ManagerFrame extends JFrame {
 	private JComboBox<String> combox_employee;
 	private JTextField product_name;
 	private JTextField product_price;
-	private JTextField product_producer;
 	private JTextField textTime;
-	private JDateChooser product_producedate;
-	private JDateChooser product_expiredate;
 	private JComboBox<String > combox_product;
 	private JTextField employee_commission;
 	private JTable importtable;
@@ -85,6 +80,7 @@ public class ManagerFrame extends JFrame {
 	private JButton btnshowallexport;
 	private JDateChooser exportdate;
 	private JButton btnfindexport;
+	private JLabel Label_statistic;
 
 	/**
 	 * Launch the application.
@@ -268,7 +264,7 @@ public class ManagerFrame extends JFrame {
 		JLabel lblNewLabel_1 = new JLabel("T\u00ECm ki\u1EBFm theo");
 		
 		combox_product = new JComboBox<String>();
-		combox_product.setModel(new DefaultComboBoxModel<String>(new String[] {"ID", "Tên mặt hàng", "Nơi sản xuất", "Ngày sản xuất", "Hạn sử dụng "}));
+		combox_product.setModel(new DefaultComboBoxModel<String>(new String[] {"ID", "Tên mặt hàng", }));
 
 		inputp = new JTextField();
 		inputp.setColumns(10);
@@ -283,6 +279,7 @@ public class ManagerFrame extends JFrame {
 		JButton btnNewButton_4 = new JButton("Xem t\u1EA5t c\u1EA3");
 		btnNewButton_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				btnNewButton_4showallproductActionperformed(e);
 			}
 		});
 		
@@ -326,26 +323,9 @@ public class ManagerFrame extends JFrame {
 			new Object[][] {
 			},
 			new String[] {
-				"ID", "T\u00EAn m\u1EB7t h\u00E0ng", "Gi\u00E1", "N\u01A1i s\u1EA3n xu\u1EA5t", "Ng\u00E0y s\u1EA3n xu\u1EA5t", "H\u1EA1n s\u1EED d\u1EE5ng", "S\u1ED1 l\u01B0\u1EE3ng"
+				"ID", "T\u00EAn m\u1EB7t h\u00E0ng", "Gi\u00E1", "S\u1ED1 l\u01B0\u1EE3ng"
 			}
-		) {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-			Class<?>[] columnTypes = new Class<?>[] {
-				Integer.class, String.class, Integer.class, String.class, String.class, Object.class, Integer.class
-			};
-			public Class<?> getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-			boolean[] columnEditables = new boolean[] {
-				true, false, false, false, false, false, false
-			};
-			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];
-			}
-		});
+		));
 		scrollPane_1.setViewportView(table_1);
 		panel_7.setLayout(gl_panel_7);
 		panel.setLayout(gl_panel);
@@ -559,22 +539,10 @@ public class ManagerFrame extends JFrame {
 		product_name.setColumns(10);
 		
 		JLabel lblGi = new JLabel("Gi\u00E1 ");
+		lblGi.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		product_price = new JTextField();
 		product_price.setColumns(10);
-		
-		JLabel lblNiSnXut = new JLabel("N\u01A1i s\u1EA3n xu\u1EA5t");
-		
-		product_producer = new JTextField();
-		product_producer.setColumns(10);
-		
-		JLabel lblNgySnXut = new JLabel("Ng\u00E0y s\u1EA3n xu\u1EA5t");
-		
-		product_producedate = new JDateChooser();
-		
-		JLabel lblHnSnXut = new JLabel("H\u1EA1n s\u1EA3n xu\u1EA5t");
-		
-		product_expiredate = new JDateChooser();
 		
 		JButton btnUpdateProduct = new JButton("S\u1EEDa");
 		btnUpdateProduct.addActionListener(new ActionListener() {
@@ -603,35 +571,22 @@ public class ManagerFrame extends JFrame {
 					.addGap(64)
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_panel_2.createSequentialGroup()
-							.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
-								.addComponent(lblTnMtHng, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblGi, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblNiSnXut, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE))
+							.addComponent(lblTnMtHng, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
 							.addGap(18)
-							.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING, false)
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+								.addComponent(btnNhpKho, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
+								.addComponent(product_name, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_panel_2.createSequentialGroup()
-									.addComponent(product_producer, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(btnUpdateProduct, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_panel_2.createSequentialGroup()
-									.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING, false)
-										.addGroup(gl_panel_2.createSequentialGroup()
-											.addComponent(product_price, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE)
-											.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-											.addComponent(lblHnSnXut, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
-											.addGap(18)
-											.addComponent(product_expiredate, GroupLayout.PREFERRED_SIZE, 143, GroupLayout.PREFERRED_SIZE))
-										.addGroup(gl_panel_2.createSequentialGroup()
-											.addComponent(product_name, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE)
-											.addGap(18)
-											.addComponent(lblNgySnXut, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
-											.addGap(18)
-											.addComponent(product_producedate, GroupLayout.PREFERRED_SIZE, 143, GroupLayout.PREFERRED_SIZE)))
-									.addGap(61)
-									.addComponent(btnNhpKho, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE))))
+									.addComponent(lblGi, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(product_price, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE))
+								.addComponent(btnUpdateProduct, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE))
+							.addGap(184))
 						.addComponent(scrollPane_3, GroupLayout.PREFERRED_SIZE, 706, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnLoadproduct, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(193, Short.MAX_VALUE))
+					.addContainerGap(78, Short.MAX_VALUE))
 		);
 		gl_panel_2.setVerticalGroup(
 			gl_panel_2.createParallelGroup(Alignment.LEADING)
@@ -642,30 +597,17 @@ public class ManagerFrame extends JFrame {
 					.addComponent(scrollPane_3, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
+							.addComponent(product_name, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
+							.addComponent(lblTnMtHng, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+							.addComponent(lblGi, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+							.addComponent(product_price, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_panel_2.createSequentialGroup()
+							.addGap(56)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblNgySnXut, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
-								.addComponent(product_name, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblTnMtHng, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(product_price, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblGi, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblHnSnXut, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(product_producer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblNiSnXut, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(gl_panel_2.createSequentialGroup()
-							.addComponent(product_producedate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(product_expiredate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_panel_2.createSequentialGroup()
-							.addGap(12)
-							.addComponent(btnNhpKho, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnUpdateProduct, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(67, Short.MAX_VALUE))
+								.addComponent(btnNhpKho, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
+								.addComponent(btnUpdateProduct, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE))))
+					.addContainerGap(55, Short.MAX_VALUE))
 		);
 		
 		table_product = new JTable();
@@ -673,26 +615,9 @@ public class ManagerFrame extends JFrame {
 			new Object[][] {
 			},
 			new String[] {
-				"ID", "T\u00EAn m\u1EB7t h\u00E0ng", "Gi\u00E1", "N\u01A1i s\u1EA3n xu\u1EA5t", "Ng\u00E0y s\u1EA3n xu\u1EA5t", "H\u1EA1n s\u1EED d\u1EE5ng", "S\u1ED1 l\u01B0\u1EE3ng"
+				"ID", "T\u00EAn m\u1EB7t h\u00E0ng", "Gi\u00E1", "S\u1ED1 l\u01B0\u1EE3ng"
 			}
-		) {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-			Class<?>[] columnTypes = new Class<?>[] {
-				Integer.class, String.class, Integer.class, String.class, String.class, String.class, Integer.class
-			};
-			public Class<?> getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-			boolean[] columnEditables = new boolean[] {
-				false, false, false, false, false, false, false
-			};
-			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];
-			}
-		});
+		));
 		scrollPane_3.setViewportView(table_product);
 		panel_2.setLayout(gl_panel_2);
 		
@@ -774,7 +699,7 @@ public class ManagerFrame extends JFrame {
 			new Object[][] {
 			},
 			new String[] {
-				"M\u00E3 h\u00F3a \u0111\u01A1n", "Ng\u01B0\u1EDDi nh\u1EADp", "Nh\u00E0 cung c\u1EA5p", "Ng\u00E0y nh\u1EADp", "M\u1EB7t h\u00E0ng", "S\u1ED1 l\u01B0\u1EE3ng ", "Gi\u00E1", "Ng\u00E0y s\u1EA3n xu\u1EA5t ", "H\u1EA1n s\u1EED d\u1EE5ng"
+				"M\u00E3 h\u00F3a \u0111\u01A1n", "Ng\u01B0\u1EDDi nh\u1EADp", "Nh\u00E0 cung c\u1EA5p", "Ng\u00E0y nh\u1EADp", "M\u1EB7t h\u00E0ng", "S\u1ED1 l\u01B0\u1EE3ng ", "Gi\u00E1"
 			}
 		));
 		scrollPane_4.setViewportView(importtable);
@@ -867,9 +792,20 @@ public class ManagerFrame extends JFrame {
 		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		combox_statistic = new JComboBox<String>();
-		combox_statistic.setModel(new DefaultComboBoxModel<String>(new String[] {"", "Tổng số tiền phụ phí trong một tháng", "Tổng số tiền nhập kho trong một tháng ", "Tổng số tiền xuất kho trong một tháng", "Doanh thu trong một tháng"}));
+		combox_statistic.setModel(new DefaultComboBoxModel<String>(new String[] {"", "Tiền lương nhân viên", "Tiền nhập kho", "Tiền bán hàng offline", "Tiền bán hàng online"}));
 		
 		JButton btnStatistic = new JButton("Thống kê");
+		btnStatistic.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				btnStatisticmouseMoved(e);
+			}
+
+			private void btnStatisticmouseMoved(MouseEvent e) {
+				// TODO Auto-generated method stub
+				Label_statistic.setText(String.valueOf(combox_statistic.getSelectedItem())+" :tháng "+(monthChooser.getMonth()+1)+" năm: "+yearChooser.getYear());
+			}
+		});
 		btnStatistic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				btnStasiticActionperformed(arg0);
@@ -888,13 +824,15 @@ public class ManagerFrame extends JFrame {
 				btnExporttoExcelFileActionperformed(arg0);
 			}
 		});
+		
+		Label_statistic = new JLabel("");
 		GroupLayout gl_panel_5 = new GroupLayout(panel_5);
 		gl_panel_5.setHorizontalGroup(
-			gl_panel_5.createParallelGroup(Alignment.LEADING)
+			gl_panel_5.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panel_5.createSequentialGroup()
-					.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
+					.addContainerGap(132, Short.MAX_VALUE)
+					.addGroup(gl_panel_5.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_panel_5.createSequentialGroup()
-							.addGap(182)
 							.addComponent(lblNewLabel_5, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
@@ -904,28 +842,34 @@ public class ManagerFrame extends JFrame {
 									.addComponent(btnStatistic, GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE))
 								.addGroup(gl_panel_5.createParallelGroup(Alignment.TRAILING, false)
 									.addComponent(yearChooser, Alignment.LEADING, 0, 0, Short.MAX_VALUE)
-									.addComponent(monthChooser, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE))))
+									.addComponent(monthChooser, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)))
+							.addContainerGap(234, Short.MAX_VALUE))
 						.addGroup(gl_panel_5.createSequentialGroup()
-							.addGap(116)
 							.addGroup(gl_panel_5.createParallelGroup(Alignment.TRAILING)
-								.addComponent(btnExporttoExcelFile)
-								.addComponent(scrollPane_6, GroupLayout.PREFERRED_SIZE, 585, GroupLayout.PREFERRED_SIZE))))
-					.addContainerGap(147, Short.MAX_VALUE))
+								.addComponent(scrollPane_6, GroupLayout.PREFERRED_SIZE, 592, GroupLayout.PREFERRED_SIZE)
+								.addComponent(btnExporttoExcelFile))
+							.addGap(124))
+						.addGroup(Alignment.LEADING, gl_panel_5.createSequentialGroup()
+							.addComponent(Label_statistic, GroupLayout.PREFERRED_SIZE, 307, GroupLayout.PREFERRED_SIZE)
+							.addContainerGap())))
 		);
 		gl_panel_5.setVerticalGroup(
 			gl_panel_5.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_5.createSequentialGroup()
-					.addGap(65)
-					.addGroup(gl_panel_5.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnStatistic, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
-						.addComponent(combox_statistic, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNewLabel_5, GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGap(39)
+					.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblNewLabel_5, GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
+						.addGroup(gl_panel_5.createParallelGroup(Alignment.BASELINE)
+							.addComponent(combox_statistic, GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
+							.addComponent(btnStatistic, GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)))
+					.addGap(18)
 					.addComponent(monthChooser, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(yearChooser, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(scrollPane_6, GroupLayout.PREFERRED_SIZE, 270, GroupLayout.PREFERRED_SIZE)
+					.addComponent(Label_statistic, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(scrollPane_6, GroupLayout.PREFERRED_SIZE, 240, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnExporttoExcelFile, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap())
@@ -949,6 +893,14 @@ public class ManagerFrame extends JFrame {
 		scrollPane_6.setViewportView(table_statistic);
 		panel_5.setLayout(gl_panel_5);
 		contentPane.setLayout(gl_contentPane);
+	}
+	//showallproduct
+	protected void btnNewButton_4showallproductActionperformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		Connectproduct connectproduct = new Connectproduct();
+		connectproduct.Connect();
+		LoadDatatoTable load = new LoadDatatoTable(table_1);
+		load.Loaddatatotable_product(connectproduct.getData_product());
 	}
 	//find export depend on input
 	protected void btnfindexportActionperformed(ActionEvent e) {
@@ -995,13 +947,13 @@ public class ManagerFrame extends JFrame {
 		// TODO Auto-generated method stub
 		statistic stt = new statistic(table_statistic, monthChooser, yearChooser);
 		if(combox_statistic.getSelectedIndex()==1) {
-			
+			stt.Statistic_Salary();
 		}
 		if(combox_statistic.getSelectedIndex()==2) {
 			stt.Statistic_Import();
 		}
 		if(combox_statistic.getSelectedIndex()==3) {
-			
+			stt.statistic_exportoff();
 		}
 		if(combox_statistic.getSelectedIndex()==4) {
 			
@@ -1069,7 +1021,7 @@ public class ManagerFrame extends JFrame {
 		else {
 			Product product = new Product(table_product ,row);
 			product = product.Converttoproduct();
-			Updateproduct update= new Updateproduct(product,this);
+			Updateproduct1 update= new Updateproduct1(product,this);
 			this.setEnabled(false);
 			update.setVisible(true);
 		}
@@ -1133,9 +1085,13 @@ public class ManagerFrame extends JFrame {
 		else {
 			Employee employee = new Employee(table_employee ,row);
 			employee = employee.ConverttoEmployee();
-			Updateemployee update= new Updateemployee(employee,this);
+			if(employee.getPosition().equals("shipper")) {
+				JOptionPane.showMessageDialog(this, "shipper can not update");
+			}else {
+				Updateemployee update= new Updateemployee(employee,this);	
 			this.setEnabled(false);
 			update.setVisible(true);
+			}
 		}
 	}
 	//button exit
@@ -1186,6 +1142,7 @@ public class ManagerFrame extends JFrame {
 				if(String.valueOf(employee_position.getSelectedItem()).equals("shipper")){
 					Employee employee = new Employee(id,employee_name.getText(),male,Date.valueOf(date),employee_adress.getText(),employee_phone.getText(),Integer.parseInt(employee_salary.getText()),position);
 					connectemployee.insertDB_employee(employee);	
+					connectemployee.inserDB_shipper(employee);
 				}
 			}	
 		}

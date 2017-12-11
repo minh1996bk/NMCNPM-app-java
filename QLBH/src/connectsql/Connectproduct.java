@@ -43,17 +43,14 @@ public class Connectproduct extends ConnectMysql {
         return result;
     }
 	public void insertDB_product(Product p){
-		String sqlCommand = "insert into "+ tableproduct +" value(? ,? ,? ,? ,? ,?, ? )";
+		String sqlCommand = "insert into "+ tableproduct +" value(? ,? ,? ,? )";
 		PreparedStatement pst = null;
 	    try {
 	    	pst = connection.prepareStatement(sqlCommand);
 	        pst.setInt(1, p.getIdNumber());
 	        pst.setString(2, p.getName());
 	        pst.setInt(3, p.getPrice());
-	        pst.setString(4, p.getProducer());
-	        pst.setString(5, String.valueOf(p.getProduceTime()));
-	        pst.setString(6, String.valueOf(p.getExpireTime()));
-	        pst.setInt(7, p.getTotal());
+	        pst.setInt(4, p.getTotal());
 	            
 	        int row = pst.executeUpdate();
 	        if(row>0){
@@ -69,7 +66,7 @@ public class Connectproduct extends ConnectMysql {
 	    }
 	public void UpdateProduct(int id, Product p) {
 			// TODO Auto-generated method stub
-			String sqlCommand="update "+tableproduct+" set name ='"+p.getName()+"', price ='"+p.getPrice()+"', producer ='"+p.getProducer()+"', produce_date ='"+p.getProduceTime()+"' , total ='"+p.getTotal()+"' where id ='"+id+"'";
+			String sqlCommand="update "+tableproduct+" set name ='"+p.getName()+"', price ='"+p.getPrice()+"',total ='"+p.getTotal()+"' where id ='"+id+"'";
 			Statement st;
 		try {
 			st=(Statement) connection.createStatement();
@@ -85,7 +82,7 @@ public class Connectproduct extends ConnectMysql {
 	public Boolean CheckSurviralProduct(Product product, ResultSet rs) {
 		try {
 			while(rs.next()) {
-				if(product.getName().toLowerCase().equals(rs.getString(2).toLowerCase())&& product.getPrice()==rs.getInt(3) && String.valueOf(product.getProduceTime()).equals(rs.getString(5))) {
+				if(product.getName().toLowerCase().equals(rs.getString(2).toLowerCase())&& product.getPrice()==rs.getInt(3)) {
 					JOptionPane.showMessageDialog(null, product.getName()+"You imported.Product is exist");
 					return true;
 				}
@@ -106,7 +103,7 @@ public class Connectproduct extends ConnectMysql {
 		try {
 			while(rs.next()) { 
 				if(id == rs.getInt(1)){
-					total = rs.getInt(7);
+					total = rs.getInt(4);
 				}
 			}
 		} catch (SQLException e) {

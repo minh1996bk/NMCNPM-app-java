@@ -58,11 +58,11 @@ public class CheckImformation {
 		return false;
 	}
 	
-	public boolean CheckProductInTable(String str1 ,String str2 ,String str3,JTable table) {
+	public boolean CheckProductInTable(String str1 ,String str2 ,JTable table) {
 		int row = table.getRowCount();
 		int i=0;
 		while(i< row) {
-			if(str1.equals(String.valueOf(table.getModel().getValueAt(i, 1))) && str2.equals(String.valueOf(table.getModel().getValueAt(i, 2)))&&str3.equals(String.valueOf(table.getModel().getValueAt(i, 4)))) {
+			if(str1.equals(String.valueOf(table.getModel().getValueAt(i, 1))) && str2.equals(String.valueOf(table.getModel().getValueAt(i, 2)))) {
 				JOptionPane.showMessageDialog(null, "This product is exist in table");
 				return true;
 			}
@@ -70,12 +70,23 @@ public class CheckImformation {
 		}
 		return false;
 	}
-	public boolean CheckProductIDInTable(String str1,JTable table) {
+	public boolean CheckProductID_inexporttable(String str1,JTable table) {
 		int row = table.getRowCount();
 		int i=0;
 		while(i< row) {
 			if(str1.equals(String.valueOf(table.getModel().getValueAt(i, 1)))) {
-				JOptionPane.showMessageDialog(null, "This product is exist in table");
+				return true;
+			}
+			i++;
+		}
+		return false;
+	}
+	
+	public boolean CheckProductID_inimporttable(String str1,JTable table) {
+		int row = table.getRowCount();
+		int i=0;
+		while(i< row) {
+			if(str1.equals(String.valueOf(table.getModel().getValueAt(i, 0)))) {
 				return true;
 			}
 			i++;

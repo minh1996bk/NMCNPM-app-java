@@ -227,7 +227,7 @@ public class EmployeeFrame extends JFrame {
 			new Object[][] {
 			},
 			new String[] {
-				"M\u00E3 h\u00E0ng ", "T\u00EAn m\u1EB7t h\u00E0ng", "Gi\u00E1 m\u1EB7t h\u00E0ng", "N\u01A1i s\u1EA3n xu\u1EA5t", "Ng\u00E0y s\u1EA3n xu\u1EA5t", "H\u1EA1n s\u1EA3n xu\u1EA5t", "S\u1ED1 l\u01B0\u1EE3ng"
+				"M\u00E3 h\u00E0ng ", "T\u00EAn m\u1EB7t h\u00E0ng", "Gi\u00E1 m\u1EB7t h\u00E0ng", "S\u1ED1 l\u01B0\u1EE3ng"
 			}
 		));
 		scrollPane_1.setViewportView(tableallproduct);
@@ -251,7 +251,8 @@ public class EmployeeFrame extends JFrame {
 		textTo = new JTextField();
 		textTo.setColumns(10);
 		
-		JComboBox statusCombox = new JComboBox();
+		
+		JComboBox<String> statusCombox = new JComboBox<String>();
 		
 		JButton btnUpdate = new JButton("Update");
 		
@@ -440,7 +441,7 @@ public class EmployeeFrame extends JFrame {
 					JOptionPane.showMessageDialog(this, "Storage is not enough this product.Please export again");
 					break;
 				}
-				if(check.CheckProductIDInTable(String.valueOf(pr.getIdNumber()), tableexport)) {
+				if(check.CheckProductID_inexporttable(String.valueOf(pr.getIdNumber()), tableexport)) {
 					JOptionPane.showMessageDialog(this, "This product is exist");
 					count++;
 				}else {

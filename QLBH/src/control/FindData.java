@@ -182,9 +182,7 @@ public class FindData {
                         row[1]= rs.getObject(2);
                         row[2]= rs.getObject(3);
                         row[3]= rs.getObject(4);
-                        row[4]= rs.getObject(5);
-                        row[5]= rs.getObject(6);
-                        row[6]= rs.getObject(7);
+
                         model.addRow(row);
                     }
             }
@@ -209,64 +207,22 @@ public class FindData {
             while(rs.next()){
                 if(combox == 0){
                     if(String.valueOf(rs.getObject(1)).toLowerCase().contains(str)){
-                        Object row[] = new Object[7];
+                        Object row[] = new Object[4];
                         row[0]= rs.getObject(1);
                         row[1]= rs.getObject(2);
                         row[2]= rs.getObject(3);
                         row[3]= rs.getObject(4);
-                        row[4]= rs.getObject(5);
-                        row[5]= rs.getObject(6);
-                        row[6]= rs.getObject(7);
                         model.addRow(row);
                     }
                 }if(combox == 1){
                     if(String.valueOf(rs.getObject(2)).toLowerCase().contains(str)){
-                        Object row[] = new Object[7];
+                        Object row[] = new Object[4];
                         row[0]= rs.getObject(1);
                         row[1]= rs.getObject(2);
                         row[2]= rs.getObject(3);
                         row[3]= rs.getObject(4);
-                        row[4]= rs.getObject(5);
-                        row[5]= rs.getObject(6);
-                        row[6]= rs.getObject(7);
                         model.addRow(row);
                     }
-                }if(combox == 2){
-                    if(String.valueOf(rs.getObject(4)).toLowerCase().contains(str)){
-                        Object row[] = new Object[7];
-                        row[0]= rs.getObject(1);
-                        row[1]= rs.getObject(2);
-                        row[2]= rs.getObject(3);
-                        row[3]= rs.getObject(4);
-                        row[4]= rs.getObject(5);
-                        row[5]= rs.getObject(6);
-                        row[6]= rs.getObject(7);
-                        model.addRow(row);
-                    }    
-                }if(combox == 3){
-                    if(String.valueOf(rs.getObject(5)).toLowerCase().contains(str)){
-                        Object row[] = new Object[7];
-                        row[0]= rs.getObject(1);
-                        row[1]= rs.getObject(2);
-                        row[2]= rs.getObject(3);
-                        row[3]= rs.getObject(4);
-                        row[4]= rs.getObject(5);
-                        row[5]= rs.getObject(6);
-                        row[6]= rs.getObject(7);
-                        model.addRow(row);
-                    }    
-                } if(combox == 4){
-                    if(String.valueOf(rs.getObject(6)).toLowerCase().contains(str)){
-                        Object row[] = new Object[7];
-                        row[0]= rs.getObject(1);
-                        row[1]= rs.getObject(2);
-                        row[2]= rs.getObject(3);
-                        row[3]= rs.getObject(4);
-                        row[4]= rs.getObject(5);
-                        row[5]= rs.getObject(6);
-                        row[6]= rs.getObject(7);
-                        model.addRow(row);
-                    }    
                 }    
             }
         } catch (SQLException ex) {
@@ -283,7 +239,7 @@ public class FindData {
         try {
 			while(rs.next()) {
 				if(str.equals(rs.getObject(4))){
-                    Object row[] = new Object[9];
+                    Object row[] = new Object[7];
                     row[0]= rs.getObject(1);
                     row[1]= rs.getObject(2);
                     row[2]= rs.getObject(3);
@@ -291,8 +247,6 @@ public class FindData {
                     row[4]= rs.getObject(5);
                     row[5]= rs.getObject(6);
                     row[6]= rs.getObject(7);
-                    row[7]= rs.getObject(8);
-                    row[8]= rs.getObject(9);
                     model.addRow(row);
 				}
 			}
@@ -328,7 +282,7 @@ public class FindData {
         try {
 			while(rs.next()) {
 				if(String.valueOf(rs.getObject(2)).toLowerCase().contains(str.toLowerCase())){
-                    Object row[] = new Object[9];
+                    Object row[] = new Object[7];
                     row[0]= rs.getObject(1);
                     row[1]= rs.getObject(2);
                     row[2]= rs.getObject(3);
@@ -336,8 +290,6 @@ public class FindData {
                     row[4]= rs.getObject(5);
                     row[5]= rs.getObject(6);
                     row[6]= rs.getObject(7);
-                    row[7]= rs.getObject(8);
-                    row[8]= rs.getObject(9);
                     model.addRow(row);
 				}
 			}
@@ -369,8 +321,6 @@ public class FindData {
                     row[4]= rs.getObject(5);
                     row[5]= rs.getObject(6);
                     row[6]= rs.getObject(7);
-                    row[7]= rs.getObject(8);
-                    row[8]= rs.getObject(9);
                     model.addRow(row);
 				}
 			}

@@ -24,6 +24,7 @@ public class ConnectMysql {
     public final static String tableexport_receipt = "export_receipt";
     public final static String tablereceipt_item = "receipt_item";
     public final static String tableshipper = "shipper";
+    public final static String tableDefaultSalary ="default_salary";
     
     public void Connect(){
         try {

@@ -85,7 +85,7 @@ public class Export {
 	        }
 	        return isSuccess;
 	    }
-	    
+	    //print report
 	    public static boolean printreport(JTable table, String path, String name, String Admin,String total) {
 	        boolean isSuccess = false;
 	        try {
@@ -93,7 +93,7 @@ public class Export {
 	            Document document = new Document();
 	            PdfWriter.getInstance(document, new FileOutputStream(path + ".pdf"));
 	            document.open();
-	            Font fontName = new Font(bf1, 35, Font.BOLD, BaseColor.RED);
+	            Font fontName = new Font(bf1, 32, Font.BOLD, BaseColor.RED);
 	            Font fontTieuDe = new Font(bf1, 20, Font.BOLD, BaseColor.BLACK);
 	            Font fontChung = new Font(bf1, 14, Font.NORMAL, BaseColor.BLACK);
 	            Font fontChuKy = new Font(bf1, 16, Font.BOLD, BaseColor.BLACK);
@@ -102,7 +102,7 @@ public class Export {
 	            document.add(new Paragraph(" ", fontChuKy));
 	            document.add(new Paragraph("Cửa Hàng Quần Áo Thời Trang_ Boutique_69 Trần Đại Nghĩa                                                                                                                                                                                                      SĐT: 0973248051", fontLienLac));
 	            document.add(new Paragraph("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------", fontLienLac));
-	            document.add(new Paragraph("                                             NHẬP KHO ", fontTieuDe));
+	            document.add(new Paragraph("                                       NHẬP KHO ", fontTieuDe));
 	            document.add(new Paragraph("                               ", fontTieuDe));
 	            document.add(new Paragraph("Tên nhân viên nhập kho : " + Admin, fontChung));
 	            document.add(new Paragraph("Báo Cáo Theo          : " + name, fontChung));
@@ -112,11 +112,11 @@ public class Export {
 	            document.add(new Paragraph(" ", fontChung));
 	            PdfPTable table2 = getTable(table);
 	            document.add(table2);
-	            document.add(new Paragraph("                                                               Tổng Giá trị: " +total,fontChuKy));
+	            document.add(new Paragraph("                                                            Tổng Giá trị: " +total,fontChuKy));
 	            document.add(new Paragraph(" ", fontChung));
 	            document.add(new Paragraph(" ", fontChung));
 	            document.add(new Paragraph(" ", fontChung));
-	            document.add(new Paragraph("                                                               Chữ ký cán bộ và đóng dấu ", fontChuKy));
+	            document.add(new Paragraph("                                                            Chữ ký cán bộ và đóng dấu ", fontChuKy));
 	            document.close();
 	            isSuccess = true;
 	        } catch (Exception e) {
@@ -126,6 +126,7 @@ public class Export {
 
 	        return isSuccess;
 	    }
+	    //print receipt for customer
 	    public static boolean printforcustomer(JTable table, String path,String Customer,String total) {
 	        boolean isSuccess = false;
 	        try {
@@ -164,6 +165,7 @@ public class Export {
 
 	        return isSuccess;
 	    }
+	    // export to excel
 	    public void ExporttoExcel(JTable table) {
 	        JFileChooser chooser = new JFileChooser();
 	        int i = chooser.showSaveDialog(chooser);

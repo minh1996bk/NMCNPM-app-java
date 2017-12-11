@@ -83,14 +83,11 @@ public class LoadDatatoTable {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         try {
             while(rs.next()){
-                Object row[] = new Object[7];
+                Object row[] = new Object[4];
                 row[0]= rs.getInt(1);
                 row[1]= rs.getObject(2);
                 row[2]= rs.getInt(3);
                 row[3]= rs.getObject(4);
-                row[4]= rs.getObject(5);
-                row[5]= rs.getObject(6);
-                row[6]= rs.getInt(7);
                 model.addRow(row);
             }
         } catch (SQLException ex) {
@@ -104,7 +101,7 @@ public class LoadDatatoTable {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         try {
             while(rs.next()){
-                Object row[] = new Object[9];
+                Object row[] = new Object[7];
                 row[0]= rs.getObject(1);
                 row[1]= rs.getObject(2);
                 row[2]= rs.getObject(3);
@@ -112,8 +109,7 @@ public class LoadDatatoTable {
                 row[4]= rs.getObject(5);
                 row[5]= rs.getObject(6);
                 row[6]= rs.getObject(7);
-                row[7]= rs.getObject(8);
-                row[8]= rs.getObject(9);
+
                 model.addRow(row);
             }
         } catch (SQLException ex) {
@@ -129,11 +125,8 @@ public class LoadDatatoTable {
     	row[0]= product.getIdNumber();
         row[1]= product.getName();
         row[2]= product.getPrice();
-        row[3]= product.getProducer();
-        row[4]= product.getProduceTime();
-        row[5]= product.getExpireTime();
-        row[6]= product.getTotal();
-        if(!check.CheckProductInTable(String.valueOf(row[1]), String.valueOf(row[2]),String.valueOf(row[4]), table)) {
+        row[3]= product.getTotal();
+        if(!check.CheckProductInTable(String.valueOf(row[1]), String.valueOf(row[2]), table)) {
         	model.addRow(row);
         }
     }

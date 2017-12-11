@@ -214,6 +214,7 @@ public class Updateemployee extends JFrame {
 					em.setCoefficientsSalary(Integer.parseInt(employee_consalary.getText()));
 					em.setPosition(String.valueOf(employee_position.getSelectedItem()));
 					connectemployee.UpdateEmployee(em.getIdNumber(),em);
+					connectemployee.Deletecommission(em.getIdNumber());
 					frame.setEnabled(true);
 					this.dispose();
 					}

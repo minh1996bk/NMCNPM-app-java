@@ -46,7 +46,7 @@ public class ConnectImport_receipt extends ConnectMysql {
 	public ResultSet getData_importdetails() {
 		
         ResultSet result = null;
-        String sqlCommand = "select import_receipt.id_receipt , employee.name , supplier.name , receipt_manager_supplier.date ,product.name , product.total ,product.price,product.produce_date,product.expire_date from " + tableimport_receipt +","+tablereceipt_manager_supplier+","+tableproduct+","+tablesupplier+","+tableemployee_manager+","+tableemployee+ " where import_receipt.id_receipt = receipt_manager_supplier.id_receipt and import_receipt.id_product = product.id and receipt_manager_supplier.id_supplier=supplier.id and receipt_manager_supplier.id_manager = employee_manager.id_manager and employee_manager.id_manager =employee.id ";
+        String sqlCommand = "select import_receipt.id_receipt , employee.name , supplier.name , receipt_manager_supplier.date ,product.name , product.total ,product.price from " + tableimport_receipt +","+tablereceipt_manager_supplier+","+tableproduct+","+tablesupplier+","+tableemployee_manager+","+tableemployee+ " where import_receipt.id_receipt = receipt_manager_supplier.id_receipt and import_receipt.id_product = product.id and receipt_manager_supplier.id_supplier=supplier.id and receipt_manager_supplier.id_manager = employee_manager.id_manager and employee_manager.id_manager =employee.id ";
         Statement st ;
         try {
             st = (Statement) connection.createStatement();
@@ -60,7 +60,7 @@ public class ConnectImport_receipt extends ConnectMysql {
 	}
 	public ResultSet getData_importforstsatistic() {
         ResultSet result = null;
-        String sqlCommand = "select product.name, receipt_manager_supplier.date , product.total ,product.price from " + tableimport_receipt +","+tablereceipt_manager_supplier+","+tableproduct+ " where import_receipt.id_receipt = receipt_manager_supplier.id_receipt and import_receipt.id_product = product.id ";
+        String sqlCommand = "select product.id ,product.name, receipt_manager_supplier.date , import_receipt.amount ,import_receipt.price from " + tableimport_receipt +","+tablereceipt_manager_supplier+","+tableproduct+ " where import_receipt.id_receipt = receipt_manager_supplier.id_receipt and import_receipt.id_product = product.id ";
         Statement st ;
         try {
             st = (Statement) connection.createStatement();
@@ -75,7 +75,7 @@ public class ConnectImport_receipt extends ConnectMysql {
 	
 	public ResultSet getData_importofmanager(int id,String date) {
         ResultSet result = null;
-        String sqlCommand = "select product.id , product.name, product.price , product.producer , product.produce_date , product.expire_date , product.total from " + tableimport_receipt +","+tablereceipt_manager_supplier+","+tableproduct+ " where import_receipt.id_receipt = receipt_manager_supplier.id_receipt and import_receipt.id_product = product.id and receipt_manager_supplier.id_manager = '" + id +"' and receipt_manager_supplier.date = '"+date+"' ";
+        String sqlCommand = "select product.id , product.name, product.price ,product.total from " + tableimport_receipt +","+tablereceipt_manager_supplier+","+tableproduct+ " where import_receipt.id_receipt = receipt_manager_supplier.id_receipt and import_receipt.id_product = product.id and receipt_manager_supplier.id_manager = '" + id +"' and receipt_manager_supplier.date = '"+date+"' ";
         Statement st ;
         try {
             st = (Statement) connection.createStatement();

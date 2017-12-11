@@ -24,19 +24,16 @@ public class Getimportactiontotable {
 		JTable table = new JTable();
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		model.setColumnCount(7);
-		Object os[] = {	"M\u00E3 m\u1EB7t h\u00E0ng", "T\u00EAn m\u1EB7t h\u00E0ng", "Gi\u00E1 m\u1EB7t h\u00E0ng", "N\u01A1i s\u1EA3n xu\u1EA5t", "Ng\u00E0y s\u1EA3n xu\u1EA5t", "H\u1EA1n s\u1EED d\u1EE5ng", "S\u1ED1 l\u01B0\u1EE3ng"};
+		Object os[] = {	"M\u00E3 m\u1EB7t h\u00E0ng", "T\u00EAn m\u1EB7t h\u00E0ng", "Gi\u00E1 m\u1EB7t h\u00E0ng","S\u1ED1 l\u01B0\u1EE3ng"};
 		model.setColumnIdentifiers(os);
 		ResultSet rs = con.getData_importofmanager(manager.getIdNumber(), date); 
 		try {
 			while(rs.next()) {
-				Object row[] = new Object[7];
+				Object row[] = new Object[4];
 				row[0] = rs.getObject(1);
 				row[1] = rs.getObject(2);
 				row[2] = rs.getObject(3);
 				row[3] = rs.getObject(4);
-				row[4] = rs.getObject(5);
-				row[5] = rs.getObject(6);
-				row[6] = rs.getObject(7);
 				model.addRow(row);
 			}
 		} catch (SQLException e) {
@@ -54,7 +51,7 @@ public class Getimportactiontotable {
 		ResultSet rs = con.getData_importofmanager(manager.getIdNumber(), date); 
 		try {
 			while(rs.next()) {
-				sum+= Integer.parseInt(rs.getString(3))*Integer.parseInt(rs.getString(7));
+				sum+= Integer.parseInt(rs.getString(3))*Integer.parseInt(rs.getString(4));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

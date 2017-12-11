@@ -7,16 +7,25 @@ public class Selectidintable {
 	public static int getID(JTable table) {
 		Connectproduct con = new Connectproduct();
 		con.Connect();
+		CheckImformation check = new CheckImformation();
 		int id = con.SelectID(con.getData_product());
-		int count = 0;
 		int row = table.getModel().getRowCount();
-		id = con.SelectID(con.getData_product());
-		while(count <row) {
-			if(id == Integer.parseInt(String.valueOf(table.getModel().getValueAt(count, 0)))) {
-				id++;
+		if(row == 0) {
+			id = con.SelectID(con.getData_product());
+		}
+		else {
+			id =con.SelectID(con.getData_product()); 
+			while(true) {
+				if(check.CheckProductID_inimporttable(String.valueOf(id), table)) {
+					id++;
+				}else {
+					return id;
+				}
 			}
-			count ++;
 		}	
 		return id;
 	}
+
 }
+
+	

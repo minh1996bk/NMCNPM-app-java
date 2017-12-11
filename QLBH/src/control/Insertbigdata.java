@@ -1,11 +1,8 @@
 package control;
 
-import java.sql.Date;
 import java.sql.ResultSet;
-
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-
 import connectsql.ConnectImport_receipt;
 import connectsql.Connectproduct;
 import connectsql.Connectreceipt_item;
@@ -33,10 +30,7 @@ public class Insertbigdata {
 		    pr.setIdNumber( Integer.parseInt(String.valueOf(table.getModel().getValueAt(count, 0))));
 		    pr.setName((String.valueOf( table.getModel().getValueAt(count,1)))); 
 		    pr.setPrice((Integer.parseInt(String.valueOf( table.getModel().getValueAt(count,2)))));
-		    pr.setProducer(String.valueOf(table.getModel().getValueAt(count,3)));
-		    pr.setTotal(Integer.parseInt(String.valueOf(table.getModel().getValueAt(count,6))));
-			pr.setProduceTime(Date.valueOf(String.valueOf(table.getModel().getValueAt(count,4))));
-			pr.setExpireTime(Date.valueOf(String.valueOf(table.getModel().getValueAt(count,5))));
+		    pr.setTotal(Integer.parseInt(String.valueOf(table.getModel().getValueAt(count,3))));
 			if(!con.CheckSurviralProduct(pr, rs)) {
 				con.insertDB_product(pr);
 			}
