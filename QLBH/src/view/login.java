@@ -10,6 +10,7 @@ import connectsql.Connectaccount;
 import control.RemmeberAccount;
 import model.Account;
 import model.Employee;
+import model.Order;
 import model.Userlogin;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -25,6 +26,7 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.awt.event.ActionEvent;
 
@@ -175,7 +177,9 @@ public class login extends JFrame {
 	                	e.setName(resultset.getString(2));
                 	}
                 	System.out.println(e.getIdNumber());
-                	EmployeeFrame maine = new EmployeeFrame(e);
+                	
+                	ArrayList<Order> orders = ConnectServer.getOrders(MyUtil.subDate(new Date(), 3), new Date());
+                	EmployeeFrame maine = new EmployeeFrame(e, orders);
                 	maine.setVisible(true);
                 	this.dispose();
                 }

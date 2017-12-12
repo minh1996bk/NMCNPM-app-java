@@ -11,9 +11,17 @@ import javax.swing.SwingConstants;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import model.Order;
+
 import javax.swing.JButton;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
+import model.Product;
+import model.Status;
 public class Orderonline extends JFrame {
 
 	/**
@@ -22,16 +30,24 @@ public class Orderonline extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTable table;
-
+	private Order order;
+	private EmployeeFrame frame;
 	/**
 	 * Launch the application.
 	 */
+  private JButton btnStatus;
+  private JButton btnCancel;
 
 
 	/**
 	 * Create the frame.
+	 * @param ff 
+	 * @param order 
 	 */
-	public Orderonline() {
+	public Orderonline(EmployeeFrame ff, Order order) {
+	  this.order = order;
+	  this.frame = ff;
+	  JFrame f = this;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 955, 609);
 		contentPane = new JPanel();
@@ -56,30 +72,37 @@ public class Orderonline extends JFrame {
 		JLabel lblAddress = new JLabel("Address2");
 		lblAddress.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		JLabel lblNewLabel_1 = new JLabel("");
+		JLabel lblNewLabel_1 = new JLabel(order.getName());
 		
-		JLabel label_5 = new JLabel("");
+		JLabel label_5 = new JLabel(order.getPhone());
 		
-		JLabel label_6 = new JLabel("");
+		JLabel label_6 = new JLabel(order.getEmail());
 		
-		JLabel label_7 = new JLabel("");
+		JLabel label_7 = new JLabel(order.getCompanyName());
 		
-		JLabel label_8 = new JLabel("");
+		JLabel label_8 = new JLabel(order.getAddress1());
 		
-		JLabel label_9 = new JLabel("");
+		JLabel label_9 = new JLabel(order.getAddress2());
 		
 		JScrollPane scrollPane = new JScrollPane();
 		
 		JButton btnNewButton = new JButton("Back");
-		
+		btnNewButton.addActionListener(new ActionListener() {
+      
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        f.dispose();
+      }
+    });
 		JLabel lblNewLabel_2 = new JLabel("Total");
 		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		JLabel label = new JLabel("");
+		JLabel label = new JLabel("" + order.countTotal());
 		
-		JButton btnStatus = new JButton("Status");
+		btnStatus = new JButton("Status");
 		
-		JButton btnBack = new JButton("Cancel");
+		btnCancel = new JButton("Cancel");
+		
 		
 		JLabel lblNewLabel_3 = new JLabel("Khách hàng");
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -98,11 +121,11 @@ public class Orderonline extends JFrame {
 		JLabel lblSinThoi = new JLabel("Số điện thoại");
 		lblSinThoi.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		JLabel label_1 = new JLabel("");
+		JLabel label_1 = new JLabel("7");
 		
-		JLabel label_2 = new JLabel("");
+		JLabel label_2 = new JLabel("8");
 		
-		JLabel label_3 = new JLabel("");
+		JLabel label_3 = new JLabel("9");
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
@@ -163,7 +186,7 @@ public class Orderonline extends JFrame {
 					.addGap(18)
 					.addComponent(btnStatus)
 					.addGap(18)
-					.addComponent(btnBack)
+					.addComponent(btnCancel)
 					.addGap(390))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap(746, Short.MAX_VALUE)
@@ -185,7 +208,7 @@ public class Orderonline extends JFrame {
 								.addComponent(label, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
 							.addGap(11)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnBack)
+								.addComponent(btnCancel)
 								.addComponent(btnStatus)
 								.addComponent(btnNewButton)))
 						.addGroup(gl_contentPane.createSequentialGroup()
@@ -238,15 +261,69 @@ public class Orderonline extends JFrame {
 		);
 		
 		table = new JTable();
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"Product ID", "Product Name", "Amount", "Price"
-			}
-		));
+		display(order.getProducts());
 		scrollPane.setViewportView(table);
 		contentPane.setLayout(gl_contentPane);
+		displayStatusButton();
+		
+		btnCancel.addActionListener(new ActionListener() {
+      
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        order.setStatus(Status.canceled);
+        ConnectServer.saveChangedOrder(order);
+        
+      }
+    });
+		
+		btnStatus.addActionListener(new ActionListener() {
+      
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        // TODO Auto-generated method stub
+        Status s = order.getStatus();
+        if (s.equals(Status.waiting)) {
+          order.setStatus(Status.accepted);
+          btnStatus.setText("Ship");
+        }
+        
+        if (s.equals(Status.accepted)) {
+          order.setStatus(Status.shipping);
+          btnStatus.setText("Complete");
+        }
+        
+        if (s.equals(Status.shipping)) {
+          order.setStatus(Status.completed);
+          btnStatus.setVisible(false);
+        }
+        
+        ConnectServer.saveChangedOrder(order);
+        frame.displayOrders(frame.subOrders);
+      }
+    });
 	}
-
+	
+	private void display(ArrayList<Product> products) {
+	  String[] columnNames = {"ID", "Product Name", "Amount", "Price"};
+	  MyModel model = new MyModel(columnNames);
+	  
+	  for (Product p : products) {
+	    String[] row = {"" + p.getIdNumber(), p.getName(), "" + p.getTotal(), "" + p.getPrice()};
+	    model.addRow(row);
+	  }
+	  table.setModel(model);
+	}
+	
+	private void displayStatusButton() {
+	  if (order.getStatus().equals(Status.waiting)) {
+	    btnStatus.setText("Accept");
+	  } else if (order.getStatus().equals(Status.accepted)) {
+	    btnStatus.setText("Ship");
+	  } else if (order.getStatus().equals(Status.shipping)) {
+	    btnStatus.setText("Complete");
+	  } else {
+      btnStatus.setVisible(false);
+      btnCancel.setVisible(false);
+    } 
+ 	}
 }

@@ -14,7 +14,10 @@ import control.LoadDatatoTable;
 import control.Updateafterexport;
 import model.Employee;
 import model.ExportReceipt;
+import model.Order;
 import model.Product;
+import model.Status;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
@@ -25,10 +28,15 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JTabbedPane;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,6 +69,9 @@ public class EmployeeFrame extends JFrame {
 	private JTextField textTo;
 	private JTextField textfind;
 	private JTable table;
+	ArrayList<Order> orders;
+	ArrayList<Order> subOrders;
+  private JComboBox<Status> statusCombox;
 	
 	/**
 	 * Launch the application.
@@ -70,8 +81,10 @@ public class EmployeeFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public EmployeeFrame(Employee e) {
+	public EmployeeFrame(Employee e, ArrayList<Order> list) {
+	  EmployeeFrame frame = this;
 		this.employee = e;
+		this.orders = list;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setBounds(100, 100, 1083, 692);
@@ -101,6 +114,7 @@ public class EmployeeFrame extends JFrame {
 		btnexit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnexitActionperformed(e);
+				
 			}
 		});
 		
@@ -252,8 +266,19 @@ public class EmployeeFrame extends JFrame {
 		textTo.setColumns(10);
 		
 		
-		JComboBox<String> statusCombox = new JComboBox<String>();
+		statusCombox = new JComboBox<>(new Status[] {
+		    Status.all,
+		    Status.waiting,
+		    Status.accepted,
+		    Status.shipping,
+		    Status.completed,
+		    Status.canceled
+		});
 		
+		
+    this.subOrders = filter(orders, (Status) statusCombox.getSelectedItem());
+    
+    
 		JButton btnUpdate = new JButton("Update");
 		
 		textfind = new JTextField();
@@ -316,6 +341,45 @@ public class EmployeeFrame extends JFrame {
 				"ID", "Time", "Total", "Customer ", "Status"
 			}
 		));
+		displayOrders(this.subOrders);
+		table.addMouseListener(new MouseListener() {
+      
+      @Override
+      public void mouseReleased(MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+      }
+      
+      @Override
+      public void mousePressed(MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+      }
+      
+      @Override
+      public void mouseExited(MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+      }
+      
+      @Override
+      public void mouseEntered(MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+      }
+      
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        // TODO Auto-generated method stub
+        if (e.getClickCount() != 2) {
+          return;
+        }
+        System.out.println("dm");
+        
+        new Orderonline(frame, orders.get(table.getSelectedRow())).setVisible(true);;
+        
+      }
+    });
 		scrollPane_2.setViewportView(table);
 		contentPane.setLayout(gl_contentPane);
 		GroupLayout gl_contentPane1 = new GroupLayout(contentPane1);
@@ -355,6 +419,44 @@ public class EmployeeFrame extends JFrame {
 		con.Connect();
 		LoadDatatoTable load = new LoadDatatoTable(tableallproduct);
 		load.Loaddatatotable_product(con.getData_product());
+		
+		statusCombox.addItemListener(new ItemListener() {
+      
+      @Override
+      public void itemStateChanged(ItemEvent e) {
+        subOrders = filter(list, (Status) statusCombox.getSelectedItem());
+        displayOrders(subOrders);
+        
+      }
+    });
+		
+		btnUpdate.addActionListener(new ActionListener() {
+      
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        orders = ConnectServer.getOrders(new Date(), new Date());
+        subOrders = filter(orders, (Status) statusCombox.getSelectedItem());
+        displayOrders(subOrders);
+        System.out.println("ok");
+      }
+    });
+		
+		btnFind.addActionListener(new ActionListener() {
+      
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        try {
+          int id = Integer.parseInt(textfind.getText());
+          subOrders = filterById(orders, id);
+          displayOrders(subOrders);
+        } catch (NumberFormatException ex) {
+          JOptionPane.showMessageDialog(null, "Nhap id dang so");
+          return;
+        }
+        
+        
+      }
+    });
 	}
 	//btnexport
 	protected void btnexportActionPerformed(ActionEvent e) {
@@ -491,4 +593,54 @@ public class EmployeeFrame extends JFrame {
 		this.dispose();
 		}
 	}
+	
+	public void displayOrders(ArrayList<Order> orders) {
+
+	  String[] columnNames = {"ID", "Time", "Total", "Customer Phone", "Status"};
+	  MyModel model = new MyModel(columnNames);
+	  for (Order order : orders) {
+	
+	    String[] row = {"" + order.getId(), order.getCreatedAt(), "" + order.countTotal(),
+	        order.getPhone(), order.getStatus().toString()};
+	    model.addRow(row);
+	  }
+	 
+	  table.setModel(model);
+	  
+	}
+	
+	private ArrayList<Order> filter(ArrayList<Order> orders, Status status) {
+	  if (status.equals(Status.all)) {
+	    return orders;
+	  } 
+	  ArrayList<Order> subOrders = new ArrayList<>();
+	  
+	  for (Order o : orders) {
+	   
+	    if (o.getStatus().equals(status)) {
+	      subOrders.add(o);
+	    }
+	  }
+	  return subOrders;
+	}
+	
+	private ArrayList<Order> filterById(ArrayList<Order> orders, int id) {
+	  ArrayList<Order> result = new ArrayList<>();
+	  for (Order o : orders) {
+	    if (o.getId() == id) {
+	      result.add(o);
+	      return result;
+	    }
+	  }
+	  return result;
+	}
+  public ArrayList<Order> getSubOrders() {
+    return subOrders;
+  }
+  public void setSubOrders(ArrayList<Order> subOrders) {
+    this.subOrders = subOrders;
+  }
+	
+	
+	
 }

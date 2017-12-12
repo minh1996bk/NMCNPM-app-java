@@ -2,13 +2,13 @@
 <classpath>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="E:/eclipseproject/QLBH/lib/mysql-connector.jar"/>
 	<classpathentry kind="lib" path="jcalendar-1.4.jar"/>
-	<classpathentry kind="lib" path="E:/eclipseproject/QLBH/lib/itextpdf-5.3.1.jar"/>
-	<classpathentry kind="lib" path="E:/eclipseproject/QLBH/lib/itextpdf-5.3.1-javadoc.jar"/>
-	<classpathentry kind="lib" path="E:/eclipseproject/QLBH/lib/itextpdf-5.3.1-sources.jar"/>
-	<classpathentry kind="lib" path="E:/eclipseproject/QLBH/lib/jcalendar-1.4.jar"/>
-	<classpathentry kind="lib" path="E:/eclipseproject/QLBH/lib/mysql-connector-java-5.1.33.jar"/>
-	<classpathentry kind="lib" path="E:/eclipseproject/QLBH/lib/pdfbox-app-2.0.7.jar"/>
+	<classpathentry kind="lib" path="/home/leo/github/NMCNPM-app-java/QLBH/lib/itextpdf-5.3.1.jar"/>
+	<classpathentry kind="lib" path="/home/leo/github/NMCNPM-app-java/QLBH/lib/itextpdf-5.3.1-javadoc.jar"/>
+	<classpathentry kind="lib" path="/home/leo/github/NMCNPM-app-java/QLBH/lib/itextpdf-5.3.1-sources.jar"/>
+	<classpathentry kind="lib" path="/home/leo/github/NMCNPM-app-java/QLBH/lib/jcalendar-1.4.jar"/>
+	<classpathentry kind="lib" path="/home/leo/github/NMCNPM-app-java/QLBH/lib/mysql-connector.jar"/>
+	<classpathentry kind="lib" path="/home/leo/github/NMCNPM-app-java/QLBH/lib/mysql-connector-java-5.1.33.jar"/>
+	<classpathentry kind="lib" path="/home/leo/github/NMCNPM-app-java/QLBH/lib/pdfbox-app-2.0.7.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
