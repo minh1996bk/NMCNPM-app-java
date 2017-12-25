@@ -1,52 +1,42 @@
 package model;
 
-import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-
 import java.util.ResourceBundle;
-
 import javax.swing.JTable;
 
 public class Employee {
-  private int idNumber;
+  private int id;
   private String name;
   private String sex;
-  private Date dateOfBirth;
+  private String birth_date;
   private String address;
-  private String phoneNumber;
-  private int coefficientsSalary;
-  private ArrayList<WorkHistory> workHistory;
+  private String phone_no;
+  private int coefficient_salary;
   private static final int DEFAULT_SALARY = 1000000;
   private String position;
-  private JTable table;
-  private int row;
-   
+
   public Employee() {
 	  
   }
   
-  public Employee (int idNumber,String name,String sex,Date birth,String address,String phone,int salary,String position) {
-	  this.idNumber = idNumber;
+  public Employee (int idNumber,String name,String sex,String birth,String address,String phone,int salary,String position) {
+	  this.id = idNumber;
 	  this.name = name;
 	  this.sex = sex;
-	  this.dateOfBirth = birth;
+	  this.birth_date = birth;
 	  this.address= address;
-	  this.phoneNumber=phone;
-	  this.coefficientsSalary = salary;
+	  this.phone_no=phone;
+	  this.coefficient_salary = salary;
 	  this.position=position;
   }
-  public Employee(JTable table, int row) {
-	  this.table= table;
-	  this.row = row;
-  }
+
   public int getIdNumber() {
-    return idNumber;
+    return id;
   }
 
   public void setIdNumber(int idNumber) {
-    this.idNumber = idNumber;
+    this.id = idNumber;
   }
 
   public String getName() {
@@ -65,12 +55,12 @@ public class Employee {
     this.sex = sex;
   }
 
-  public Date getDateOfBirth() {
-    return dateOfBirth;
+  public String getDateOfBirth() {
+    return birth_date;
   }
 
-  public void setDateOfBirth(Date dateOfBirth) {
-    this.dateOfBirth = dateOfBirth;
+  public void setDateOfBirth(String dateOfBirth) {
+    this.birth_date = dateOfBirth;
   }
 
   public String getAddress() {
@@ -82,35 +72,28 @@ public class Employee {
   }
 
   public String getPhoneNumber() {
-    return phoneNumber;
+    return phone_no;
   }
 
   public void setPhoneNumber(String phoneNumber) {
-    this.phoneNumber = phoneNumber;
+    this.phone_no = phoneNumber;
   }
 
   public int getCoefficientsSalary() {
-    return coefficientsSalary;
+    return coefficient_salary;
   }
 
   public void setCoefficientsSalary(int coefficientsSalary) {
-    this.coefficientsSalary = coefficientsSalary;
+    this.coefficient_salary = coefficientsSalary;
   }
 
   public int getDefaultSalary() {
     return DEFAULT_SALARY;
   }
 
-  public ArrayList<WorkHistory> getWorkHistory() {
-    return workHistory;
-  }
-
-  public void setWorkHistory(ArrayList<WorkHistory> workHistory) {
-    this.workHistory = workHistory;
-  }
   
   public int countSalary() {
-    return coefficientsSalary * this.getDefaultSalary();
+    return coefficient_salary * this.getDefaultSalary();
   }
   
   /**
@@ -122,8 +105,8 @@ public class Employee {
     DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
     ResourceBundle b = ResourceBundle.getBundle("view.Label");
 
-    String[] array = {"" + this.idNumber, this.name, this.sex, 
-        df.format(this.dateOfBirth), this.address, this.phoneNumber, "" + this.coefficientsSalary, 
+    String[] array = {"" + this.id, this.name, this.sex, 
+        df.format(this.birth_date), this.address, this.phone_no, "" + this.coefficient_salary, 
         b.getString("Employee")};
     return array;
   }
@@ -141,12 +124,12 @@ public class Employee {
   public void setPosition(String position) {
 	this.position = position;
   }
-  public Employee ConverttoEmployee(){
+  public Employee ConverttoEmployee(JTable table, int row){
       	Employee em = new Employee();
           em.setIdNumber( Integer.parseInt(String.valueOf(table.getModel().getValueAt(row, 0))));
           em.setName((String.valueOf( table.getModel().getValueAt(row,1)))); 
           em.setSex((String.valueOf( table.getModel().getValueAt(row,2))));
-          em.setDateOfBirth((Date.valueOf(String.valueOf(table.getModel().getValueAt(row,3)))));
+          em.setDateOfBirth((String.valueOf(String.valueOf(table.getModel().getValueAt(row,3)))));
           em.setAddress((String.valueOf( table.getModel().getValueAt(row,4))));
           em.setPhoneNumber((String.valueOf( table.getModel().getValueAt(row,5))));
           em.setCoefficientsSalary((Integer.parseInt(String.valueOf(table.getModel().getValueAt(row,6)))));

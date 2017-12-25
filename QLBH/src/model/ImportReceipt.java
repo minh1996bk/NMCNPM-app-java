@@ -4,23 +4,29 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 public class ImportReceipt {
-  private int code;
+  
+  
+  
+  private int id_receipt;
   private Manager importer;
   private Supplier supplier;
-  private ArrayList<Product> array;
-  private Date time; 
+  private ArrayList<Product> items;
+  private String date; 
+  
+  
+  
+  
   public ImportReceipt() {
     
   }
 
   public int getCode() {
-    return code;
+    return id_receipt;
   }
 
   public void setCode(int code) {
-    this.code = code;
+    this.id_receipt = code;
   }
 
   public Manager getImporter() {
@@ -39,31 +45,31 @@ public class ImportReceipt {
     this.supplier = supplier;
   }
 
-  public Date getTime() {
-    return time;
+  public String getTime() {
+    return date;
   }
 
-  public void setTime(Date time) {
-    this.time = time;
+  public void setTime(String time) {
+    this.date = time;
   }
   
   
   public void writeToFile(String urlFolder) throws IOException {
-    String urlFile = urlFolder + "/" + this.code + "import.txt";
+    String urlFile = urlFolder + "/" + this.id_receipt + "import.txt";
     FileWriter writer = new FileWriter(urlFile);
     BufferedWriter bwriter = new BufferedWriter(writer);
-    writer.write("Receipt ID : " + this.code);
+    writer.write("Receipt ID : " + this.id_receipt);
     writer.write(System.lineSeparator());
     writer.write("Employee Name : " + this.getImporter().getName());
     writer.write(System.lineSeparator());
     writer.write("Supplier Name : " + this.getSupplier().getName());
     writer.write(System.lineSeparator());
     writer.write("Date : ");
-    writer.write(this.time.toString());
+    writer.write(this.date.toString());
     writer.write(System.lineSeparator());
     writer.write("Products : ");
     writer.write(System.lineSeparator());
-    for (Product p : array) {
+    for (Product p : items) {
       writer.write("" + p.getIdNumber());
       writer.write("++++");
       writer.write(p.getName());
@@ -80,14 +86,14 @@ public class ImportReceipt {
  * @return the array
  */
 public ArrayList<Product> getArray() {
-	return array;
+	return items;
 }
 
 /**
  * @param array the array to set
  */
 public void setArray(ArrayList<Product> array) {
-	this.array = array;
+	this.items = array;
 }
  
 }

@@ -9,15 +9,13 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextField;
-import connectsql.ConnectImport_receipt;
-import connectsql.ConnectReceipt_manager_supplier;
-import connectsql.Connectsupplier;
-import control.CheckImformation;
-import control.Export;
-import control.Getimportactiontotable;
-import control.Insertbigdata;
-import control.LoadDatatoTable;
-import control.Selectidintable;
+
+import controlJson.CheckImformation;
+import controlJson.Export;
+import controlJson.Getimportactiontotable;
+import controlJson.LoadDataToTable;
+import controlJson.SelectId;
+import controlJson.Selectidintable;
 import model.ImportReceipt;
 import model.Manager;
 import model.Product;
@@ -29,13 +27,24 @@ import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import connectJson.ImportReceiptJson;
+import connectJson.SupplierJson;
+
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.awt.event.ActionEvent;
+import javax.swing.JComboBox;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 
 public class AddImportReceipt1 extends JFrame {
 	private Manager manager;
@@ -51,10 +60,6 @@ public class AddImportReceipt1 extends JFrame {
 	private JTextField product_name;
 	private JTextField product_price;
 	private JTextField product_total;
-	private JTextField supplier_name;
-	private JTextField supplier_address;
-	private JTextField supplier_mail;
-	private JTextField supplier_phone;
 	private JTable table;
 	private JButton btnAddproduct;
 	private JButton btnUpdateproduct;
@@ -62,14 +67,19 @@ public class AddImportReceipt1 extends JFrame {
 	private JLabel total_1;
 	private JButton btnprintimport;
 	private JLabel lblMtHng;
+	private JLabel lblThLoi;
+	private JComboBox<String> product_type;
+	private ArrayList<Supplier> suppliers;
 	/**
 	 * Launch the application.
 	 */
+  private JComboBox<String> supllierCombobox;
 
 	/**
 	 * Create the frame.
 	 */
 	public AddImportReceipt1(Manager manager ,ManagerFrame frame) {
+	  this.suppliers = SupplierJson.getSupplier();
 		this.manager = manager;
 		this.frame = frame;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -123,37 +133,18 @@ public class AddImportReceipt1 extends JFrame {
 			}
 		});
 		
-		JLabel lblTn = new JLabel("T\u00EAn");
-		lblTn.setHorizontalAlignment(SwingConstants.CENTER);
-		
-		JLabel lblaCh = new JLabel("\u0110\u1ECBa ch\u1EC9");
-		lblaCh.setHorizontalAlignment(SwingConstants.CENTER);
-		
-		JLabel lblGmail = new JLabel("Gmail");
-		lblGmail.setHorizontalAlignment(SwingConstants.CENTER);
-		
-		JLabel lblSinThoi = new JLabel("S\u1ED1 \u0111i\u1EC7n tho\u1EA1i");
-		lblSinThoi.setHorizontalAlignment(SwingConstants.CENTER);
-		
-		supplier_name = new JTextField();
-		supplier_name.setColumns(10);
-		
-		supplier_address = new JTextField();
-		supplier_address.setColumns(10);
-		
-		supplier_mail = new JTextField();
-		supplier_mail.setColumns(10);
-		
-		supplier_phone = new JTextField();
-		supplier_phone.setColumns(10);
-		
 		JLabel lblNewLabel_2 = new JLabel("T\u1ED5ng gi\u00E1 tr\u1ECB:");
 		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		JButton btnImportproduct = new JButton("Nh\u1EADp kho");
 		btnImportproduct.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnImportproductActionPerformed(e);
+				try {
+					btnImportproductActionPerformed(e);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		
@@ -175,68 +166,69 @@ public class AddImportReceipt1 extends JFrame {
 		
 		lblMtHng = new JLabel("Mặt hàng");
 		lblMtHng.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		
+		lblThLoi = new JLabel("Thể loại");
+		lblThLoi.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		product_type = new JComboBox<String>();
+		product_type.setModel(new DefaultComboBoxModel<String>(new String[] {"", "mens ", "womens ", "kids", "shoes", "bags"}));
+		
+		
+		supllierCombobox = new JComboBox<String>();
+		setupSupplier(supllierCombobox);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
+							.addContainerGap()
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-									.addContainerGap()
-									.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-									.addGap(18)
-									.addComponent(product_name, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addContainerGap()
-									.addComponent(lblGiMtHng, GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
-									.addGap(18)
-									.addComponent(product_price, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE))
-								.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(lblTn, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(supplier_name, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(lblaCh, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(supplier_address, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(lblGmail, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(supplier_mail, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(lblSinThoi, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(btnImportproduct)
-										.addComponent(supplier_phone, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE)))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addContainerGap()
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-										.addComponent(btnAddproduct)
-										.addComponent(lblSLng, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 										.addGroup(gl_contentPane.createSequentialGroup()
-											.addGap(18)
-											.addComponent(product_total, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE))
-										.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-											.addGap(30)
-											.addComponent(btnUpdateproduct, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
-											.addGap(33)
-											.addComponent(btnDeleteproduct, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)))))
-							.addPreferredGap(ComponentPlacement.RELATED, 10, Short.MAX_VALUE))
+											.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+												.addGroup(gl_contentPane.createSequentialGroup()
+													.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
+													.addGap(18)
+													.addComponent(product_name, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE))
+												.addGroup(gl_contentPane.createSequentialGroup()
+													.addComponent(lblGiMtHng, GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
+													.addGap(18)
+													.addComponent(product_price, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE))
+												.addGroup(gl_contentPane.createSequentialGroup()
+													.addComponent(lblSLng, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
+													.addGap(18)
+													.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+														.addComponent(product_type, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)
+														.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+															.addGroup(gl_contentPane.createSequentialGroup()
+																.addComponent(btnUpdateproduct, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
+																.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+																.addComponent(btnDeleteproduct, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE))
+															.addComponent(product_total, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE)))))
+											.addPreferredGap(ComponentPlacement.RELATED, 20, Short.MAX_VALUE))
+										.addGroup(gl_contentPane.createSequentialGroup()
+											.addComponent(lblMtHng, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
+											.addPreferredGap(ComponentPlacement.RELATED)))
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+										.addComponent(btnAddproduct)
+										.addComponent(lblThLoi, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED))))
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(lblMtHng, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)))
+							.addGap(35)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(supllierCombobox, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
+								.addComponent(btnImportproduct))
+							.addGap(142)))
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 690, GroupLayout.PREFERRED_SIZE)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGap(26)
-									.addComponent(btnprintimport, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
+									.addComponent(btnprintimport, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE)
 									.addGap(18)
 									.addComponent(btnExit, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE))
 								.addGroup(gl_contentPane.createSequentialGroup()
@@ -248,7 +240,7 @@ public class AddImportReceipt1 extends JFrame {
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 501, GroupLayout.PREFERRED_SIZE)
 							.addGap(18)
@@ -274,30 +266,20 @@ public class AddImportReceipt1 extends JFrame {
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 								.addComponent(product_total, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
 								.addComponent(lblSLng, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
-							.addGap(28)
+							.addGap(18)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnDeleteproduct)
+								.addComponent(lblThLoi, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
+								.addComponent(product_type, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+							.addGap(26)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(btnAddproduct)
 								.addComponent(btnUpdateproduct)
-								.addComponent(btnAddproduct))
+								.addComponent(btnDeleteproduct))
 							.addGap(18)
 							.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblTn, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
-								.addComponent(supplier_name, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblaCh, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
-								.addComponent(supplier_address, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblGmail, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
-								.addComponent(supplier_mail, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblSinThoi, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
-								.addComponent(supplier_phone, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
+							.addGap(27)
+							.addComponent(supllierCombobox, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+							.addGap(43)
 							.addComponent(btnImportproduct, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap(19, Short.MAX_VALUE))
 		);
@@ -307,18 +289,29 @@ public class AddImportReceipt1 extends JFrame {
 			new Object[][] {
 			},
 			new String[] {
-				"M\u00E3 m\u1EB7t h\u00E0ng", "T\u00EAn m\u1EB7t h\u00E0ng", "Gi\u00E1 m\u1EB7t h\u00E0ng", "S\u1ED1 l\u01B0\u1EE3ng"
+				"M\u00E3 m\u1EB7t h\u00E0ng", "T\u00EAn m\u1EB7t h\u00E0ng", "Gi\u00E1 m\u1EB7t h\u00E0ng", "S\u1ED1 l\u01B0\u1EE3ng", "Th\u1EC3 lo\u1EA1i"
 			}
-		));
+		) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+			boolean[] columnEditables = new boolean[] {
+				false, true, true, true, true
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
 		scrollPane.setViewportView(table);
 		contentPane.setLayout(gl_contentPane);
 	}
-	
+	//btn printreceipt
 	protected void btnprintimportActionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		JTable tableofemployee = new JTable();
 		java.util.Date today = new java.util.Date();
-		//get all import action of this manager and conver to table
+		//get all import action of this manager and convert to table
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String date = sdf.format(today);
 		Getimportactiontotable importaction = new Getimportactiontotable(manager, date);
@@ -346,46 +339,32 @@ public class AddImportReceipt1 extends JFrame {
 	}
 
 	//btn import
-	protected void btnImportproductActionPerformed(ActionEvent e) {
+	protected void btnImportproductActionPerformed(ActionEvent e) throws IOException {
 		// TODO Auto-generated method stub
-		CheckImformation check = new CheckImformation();
-		Connectsupplier connectsupplier = new Connectsupplier();
-		connectsupplier.Connect();
-		ConnectImport_receipt connectimport = new ConnectImport_receipt();
-		connectimport.Connect();
-		ConnectReceipt_manager_supplier crmp = new ConnectReceipt_manager_supplier();
-		crmp.Connect();
-		if(supplier_name.getText().equals("")|| supplier_mail.getText().equals("") || supplier_address.getText().equals("")||supplier_phone.getText().equals("")){
-			JOptionPane.showMessageDialog(this, "Please enter all imformation of supplier");
-		}
-
-		else {
-			if(check.isNotPhoneNumber(supplier_phone.getText())) {
-				return;
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		if(table.getModel().getRowCount()==0) {
+			JOptionPane.showMessageDialog(this,"You must add product");
+		}else {
+			if (suppliers == null || suppliers.isEmpty()) {
+			  JOptionPane.showMessageDialog(this, "You must choose producer");
+			  return;
 			}
-			else {
-				DefaultTableModel model = (DefaultTableModel) table.getModel();
-				Insertbigdata insertall = new Insertbigdata(table);
-				supplier = new model.Supplier(connectsupplier.SelectID(connectsupplier.getData_supplier()),supplier_name.getText(),supplier_address.getText(),supplier_mail.getText(),supplier_phone.getText());
-				//set values for importreceipt
-				ImportReceipt ir = new ImportReceipt();
-				ir.setCode(connectimport.SelectID(connectimport.getData_importReceipt()));
-				ir.setImporter(manager);
-				ir.setSupplier(supplier);
-				ir.setArray(new Product(table,table.getRowCount()).ConvertToLArraylist());
-				//insert to product
-				insertall.insertProducts();
-				//insert to supplier
-				connectsupplier.insertDB_Supplier(supplier);
-				//insert to receipt_manager_supplier
-				crmp.insertDB_Receipt_manager_supplier(ir);
-				//insert to import_receipt 
-				insertall.insertImportReceipt(ir);
-				model.setNumRows(0);
-				product_name.setText("");product_price.setText("");product_total.setText("");
-			}	
-		}
-	}
+			//set values for importreceipt
+			ImportReceipt ir = new ImportReceipt();
+			ir.setCode(SelectId.SelectID_importreceipt(ImportReceiptJson.getImportReceipt()));
+			ir.setImporter(manager);
+			ir.setSupplier(suppliers.get(supllierCombobox.getSelectedIndex()));
+			ir.setArray(new Product().ConvertToLArraylist(table,table.getRowCount()));
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			
+			ir.setTime(dateFormat.format(new Date()));
+			
+			ImportReceiptJson.insertImportReceipt(ir);
+			model.setNumRows(0);
+			product_name.setText("");product_price.setText("");product_total.setText("");
+		}	
+	}	
+	
 	protected void btnExitActionperformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		frame.setEnabled(true);
@@ -413,8 +392,8 @@ public class AddImportReceipt1 extends JFrame {
 			JOptionPane.showMessageDialog(this, "You must select a row to update");
 		}
 		else {
-			Product product = new Product(table,row);
-			product=product.Converttoproduct();
+			Product product = new Product();
+			product=product.Converttoproduct(table,row);
 			DefaultTableModel model = (DefaultTableModel) table.getModel();
 			model.removeRow(row);
 			product_name.setText(product.getName());
@@ -435,15 +414,35 @@ public class AddImportReceipt1 extends JFrame {
 			if(check.isNotNumeric(product_price.getText())||check.isNotNumeric(product_total.getText())) {
 				return;
 			}else {
-				Product product = new Product(Selectidintable.getID(table),product_name.getText(),Integer.parseInt(product_price.getText()),Integer.parseInt(product_total.getText()));
-				if(!check.CheckProductInTable(product.getName(),String.valueOf(product.getPrice()), table)) {
+				Product product = new Product(Selectidintable.getID(table),product_name.getText(),Integer.parseInt(product_price.getText()),Integer.parseInt(product_total.getText()),String.valueOf(product_type.getSelectedItem()));
+				if(!check.CheckProductInTable(product.getName(),String.valueOf(product.getPrice()),String.valueOf(product.getType()), table)) {
 					money = money+Integer.parseInt(product_price.getText())*Integer.parseInt(product_total.getText());
 					total_1.setText(String.valueOf(money)+"VND");
 				}
-				LoadDatatoTable load = new LoadDatatoTable(product,table);
+				LoadDataToTable load = new LoadDataToTable(product, table);
 				load.Loaddatatotable();
 			}
 		}
+	}
+	
+	/**
+	 * Set id and name of suplliers for combobox
+	 * get data supplier from server by json
+	 */
+	public void setupSupplier(JComboBox<String> supplierCmb) {
+	  ComboBoxModel<String> model;
+	  if (suppliers == null || suppliers.size() == 0) {
+	    String[] items= {"No producer"};
+	    model = new DefaultComboBoxModel<>(items);
+	  } else {
+	    Vector<String> items = new Vector<>();
+	    for (Supplier supplier: suppliers) {
+	      items.add(supplier.getIdNumber() + "-" + supplier.getName());
+	    }
+	    model = new DefaultComboBoxModel<>(items);
+	    
+	  }
+	  supplierCmb.setModel(model);
 	}
 
 	/**
@@ -458,5 +457,19 @@ public class AddImportReceipt1 extends JFrame {
 	 */
 	public void setImportreceipt(ImportReceipt importreceipt) {
 		this.importreceipt = importreceipt;
+	}
+
+	/**
+	 * @return the supplier
+	 */
+	public Supplier getSupplier() {
+		return supplier;
+	}
+
+	/**
+	 * @param supplier the supplier to set
+	 */
+	public void setSupplier(Supplier supplier) {
+		this.supplier = supplier;
 	}
 }

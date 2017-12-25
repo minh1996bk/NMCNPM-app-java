@@ -12,7 +12,6 @@ public class SuperMarket {
   private ArrayList<ImportReceipt> importReceiptList;
   private ArrayList<ExportReceipt> exportReceiptList;
   private ArrayList<Supplier> supplierList;
-  private ArrayList<CostsIncurred> costsIncurredList;
 
   public SuperMarket() {
     
@@ -64,14 +63,6 @@ public class SuperMarket {
 
   public void setSupplierList(ArrayList<Supplier> supplierList) {
     this.supplierList = supplierList;
-  }
-
-  public ArrayList<CostsIncurred> getCostsIncurredList() {
-    return costsIncurredList;
-  }
-
-  public void setCostsIncurredList(ArrayList<CostsIncurred> costsIncurredList) {
-    this.costsIncurredList = costsIncurredList;
   }
 
   

@@ -5,34 +5,30 @@ import javax.swing.JTable;
 
 
 public class Product {
-  private int idNumber;
+  private int id;
   private String name;
   private int price;
   private int total;
-  private JTable table;
-  private int row;
+  private String type;
   
   public Product() {
     
   }
-  public Product(int idNumber,String name,int price, int total){
-	  this.idNumber = idNumber;
+  public Product(int id,String name,int price, int total,String type){
+	  this.id = id;
 	  this.name = name;
 	  this.price = price;
 	  this.total = total;
+	  this.type = type;
   }
 
-  public Product(JTable table, int row) {
 
-	  this.table = table;
-	  this.setRow(row);
-}
 public int getIdNumber() {
-    return idNumber;
+    return id;
   }
 
   public void setIdNumber(int idNumber) {
-    this.idNumber = idNumber;
+    this.id = idNumber;
   }
 
   public String getName() {
@@ -58,7 +54,7 @@ public int getIdNumber() {
    */
   
   public String[] toArrayString() {
-    String[] array = {"" + this.idNumber, this.name, "" + this.price,};
+    String[] array = {"" + this.id, this.name, "" + this.price,};
     return array;
   }
 
@@ -72,25 +68,18 @@ public int getIdNumber() {
 	/**
 	 * @return the row
 	 */
-	public int getRow() {
-		return row;
-	}
-	/**
-	 * @param row the row to set
-	 */
-	public void setRow(int row) {
-		this.row = row;
-	}
-	public Product Converttoproduct(){
+
+	public Product Converttoproduct(JTable table, int row){
 		Product pr = new Product();
 	    pr.setIdNumber( Integer.parseInt(String.valueOf(table.getModel().getValueAt(row, 0))));
 	    pr.setName((String.valueOf( table.getModel().getValueAt(row,1)))); 
 	    pr.setPrice((Integer.parseInt(String.valueOf( table.getModel().getValueAt(row,2)))));
 	    pr.setTotal(Integer.parseInt(String.valueOf(table.getModel().getValueAt(row,3))));
+	    pr.setType(String.valueOf(table.getModel().getValueAt(row, 4)));
 	    return pr;
 	}
 	
-	public ArrayList<Product> ConvertToLArraylist(){
+	public ArrayList<Product> ConvertToLArraylist(JTable table, int row){
 		ArrayList<Product > arraylist = new ArrayList<>();
 		
 		int i = 0;
@@ -100,10 +89,23 @@ public int getIdNumber() {
 		    pr.setName((String.valueOf( table.getModel().getValueAt(i,1)))); 
 		    pr.setPrice((Integer.parseInt(String.valueOf( table.getModel().getValueAt(i,2)))));
 		    pr.setTotal(Integer.parseInt(String.valueOf(table.getModel().getValueAt(i,3))));
+		    pr.setType(String.valueOf(table.getModel().getValueAt(i, 4)));
 			arraylist.add(i, pr);
 			i++;
 		}
 	    return arraylist;
+	}
+	/**
+	 * @return the type
+	 */
+	public String getType() {
+		return type;
+	}
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(String type) {
+		this.type = type;
 	}
 }
 

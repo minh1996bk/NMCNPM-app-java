@@ -1,6 +1,5 @@
 package model;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -11,7 +10,7 @@ public class Manager extends Employee {
   public Manager() {
     
   }
-  public Manager(int idNumber,String name,String sex,Date birth,String address,String phone,int salary,String position, int commission) {
+  public Manager(int idNumber,String name,String sex,String birth,String address,String phone,int salary,String position, int commission) {
 	  super(idNumber, name, sex, birth, address, phone, salary, position);
 	  this.commission = commission;
   }
@@ -42,7 +41,7 @@ public class Manager extends Employee {
 		manager.setIdNumber(rs.getInt(1));
 		manager.setName(rs.getString(2));
 		manager.setSex(rs.getString(3));
-		manager.setDateOfBirth(rs.getDate(4));
+		manager.setDateOfBirth("2017-12-16");
 		manager.setAddress(rs.getString(5));
 		manager.setPhoneNumber(rs.getString(6));
 		manager.setCoefficientsSalary(rs.getInt(7));

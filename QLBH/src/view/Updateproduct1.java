@@ -4,8 +4,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import connectsql.Connectproduct;
-import control.CheckImformation;
+import connectJson.ProductJson;
+import controlJson.CheckImformation;
 import model.Product;
 
 import javax.swing.GroupLayout;
@@ -16,6 +16,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
 
@@ -63,7 +65,12 @@ public class Updateproduct1 extends JFrame {
 		btnupdateproduct = new JButton("Cập nhật");
 		btnupdateproduct.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				btnupdateproductactionperformed(arg0);
+				try {
+					btnupdateproductactionperformed(arg0);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			
 			}
 		});
@@ -121,10 +128,10 @@ public class Updateproduct1 extends JFrame {
 		this.dispose();
 	}
 
-	protected void btnupdateproductactionperformed(ActionEvent arg0) {
+	protected void btnupdateproductactionperformed(ActionEvent arg0) throws IOException {
 		// TODO Auto-generated method stub
-		Connectproduct connectemproduct = new Connectproduct();
-		connectemproduct.Connect();
+//		Connectproduct connectemproduct = new Connectproduct();
+//		connectemproduct.Connect();
 		if(product_name.getText().equals("")||product_price.getText().equals("")) {
 			JOptionPane.showMessageDialog(this, "You must fill all imformation!");
 		}else {
@@ -134,7 +141,9 @@ public class Updateproduct1 extends JFrame {
 			}else {
 				product.setName(product_name.getText());
 				product.setPrice(Integer.parseInt(product_price.getText()));
-				connectemproduct.UpdateProduct(product.getIdNumber(), product);
+				ArrayList<Product> array = new  ArrayList<Product>();
+				array.add(product);
+				ProductJson.updateProduct(array);
 				frame.setEnabled(true);
 				this.dispose();
 				}

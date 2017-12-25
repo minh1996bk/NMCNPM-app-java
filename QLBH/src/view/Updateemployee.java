@@ -3,7 +3,6 @@ package view;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
@@ -12,9 +11,8 @@ import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import com.toedter.calendar.JDateChooser;
-
-import connectsql.Connectemployee;
-import control.CheckImformation;
+import connectJson.EmployeeJson;
+import controlJson.CheckImformation;
 import model.Employee;
 import model.Manager;
 
@@ -22,8 +20,8 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
-import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class Updateemployee extends JFrame {
 
@@ -72,12 +70,12 @@ public class Updateemployee extends JFrame {
 		
 		employee_male = new JComboBox<String>();
 		employee_male.setModel(new DefaultComboBoxModel<String>(new String[] {"men", "women"}));
-		employee_male.setSelectedItem(this.employee.getSex());
+		employee_male.setSelectedItem(employee.getSex());
 		
 		JLabel lblNgySinh = new JLabel("Ng\u00E0y sinh");
 		
 		employee_birth = new JDateChooser();
-		employee_birth.setDate(this.employee.getDateOfBirth());
+		employee_birth.setDate(Date.valueOf(this.employee.getDateOfBirth()));
 		
 		JLabel lblaCh = new JLabel("\u0110\u1ECBa ch\u1EC9");
 		
@@ -137,11 +135,11 @@ public class Updateemployee extends JFrame {
 							.addComponent(btnThot, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE))
 						.addComponent(employee_phone, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE)
 						.addComponent(employee_address, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE)
-						.addComponent(employee_name, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE)
 						.addComponent(employee_male, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
 						.addComponent(employee_birth, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE)
 						.addComponent(employee_consalary, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE)
-						.addComponent(employee_position, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(employee_position, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(employee_name, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE))
 					.addContainerGap(107, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
@@ -149,7 +147,7 @@ public class Updateemployee extends JFrame {
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(75)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(employee_name, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(employee_name)
 						.addComponent(lblNewLabel_1, GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE))
 					.addGap(27)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -171,15 +169,15 @@ public class Updateemployee extends JFrame {
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblLng, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
 						.addComponent(employee_consalary, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGap(35)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblVTr, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
-						.addComponent(employee_position, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(employee_position, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
+					.addGap(17)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnThot, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
-					.addGap(25))
+					.addGap(37))
 		);
 		contentPane.setLayout(gl_contentPane);
 	}
@@ -192,8 +190,7 @@ public class Updateemployee extends JFrame {
 
 	protected void btnSaveimformationofEmployee(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		Connectemployee connectemployee = new Connectemployee();
-		connectemployee.Connect();
+
 		if(employee_name.getText().equals("")||employee_address.getText().equals("")||employee_phone.getText().equals("")||employee_consalary.getText().equals("")||employee_birth.getDate() == null) {
 			JOptionPane.showMessageDialog(this, "You must fill all imformation!");
 		}else {
@@ -209,12 +206,16 @@ public class Updateemployee extends JFrame {
 					em.setName(employee_name.getText());
 					em.setAddress(employee_address.getText());
 					em.setSex(String.valueOf( employee_male.getSelectedItem()));
-					em.setDateOfBirth(Date.valueOf(date));
+					em.setDateOfBirth(String.valueOf(date));
 					em.setPhoneNumber(employee_phone.getText());
 					em.setCoefficientsSalary(Integer.parseInt(employee_consalary.getText()));
 					em.setPosition(String.valueOf(employee_position.getSelectedItem()));
-					connectemployee.UpdateEmployee(em.getIdNumber(),em);
-					connectemployee.Deletecommission(em.getIdNumber());
+					
+					ArrayList<Employee> array = new ArrayList<Employee>();
+					array.add(em);
+					EmployeeJson.updateEmployee(array);
+					// them ham delete commission
+					//connectemployee.Deletecommission(em.getIdNumber());
 					frame.setEnabled(true);
 					this.dispose();
 					}
@@ -224,7 +225,7 @@ public class Updateemployee extends JFrame {
 					m.setName(employee_name.getText());
 					m.setAddress(employee_address.getText());
 					m.setSex(String.valueOf( employee_male.getSelectedItem()));
-					m.setDateOfBirth(Date.valueOf(date));
+					m.setDateOfBirth(String.valueOf(date));
 					m.setPhoneNumber(employee_phone.getText());
 					m.setCoefficientsSalary(Integer.parseInt(employee_consalary.getText()));
 					m.setPosition(String.valueOf(employee_position.getSelectedItem()));

@@ -3,15 +3,12 @@ package view;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import connectsql.Connectexport_receipt;
-import connectsql.Connectproduct;
-import connectsql.Connectreceipt_item;
-import control.CheckImformation;
-import control.Export;
-import control.FindData;
-import control.Insertbigdata;
-import control.LoadDatatoTable;
-import control.Updateafterexport;
+import controlJson.CheckImformation;
+import controlJson.Export;
+import controlJson.FindData;
+import controlJson.LoadDataToTable;
+import controlJson.SelectId;
+import controlJson.Updateafterexport;
 import model.Employee;
 import model.ExportReceipt;
 import model.Order;
@@ -34,7 +31,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
-import java.sql.ResultSet;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,6 +44,11 @@ import java.awt.Desktop;
 import java.awt.Font;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import connectJson.ExportReceiptJson;
+import connectJson.OrderJson;
+import connectJson.ProductJson;
+
 import javax.swing.JComboBox;
 public class EmployeeFrame extends JFrame {
 
@@ -71,7 +73,7 @@ public class EmployeeFrame extends JFrame {
 	private JTable table;
 	ArrayList<Order> orders;
 	ArrayList<Order> subOrders;
-  private JComboBox<Status> statusCombox;
+	private JComboBox<Status> statusCombox;
 	
 	/**
 	 * Launch the application.
@@ -142,7 +144,12 @@ public class EmployeeFrame extends JFrame {
 		btnexport = new JButton("Xuất kho");
 		btnexport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnexportActionPerformed(e);
+				try {
+					btnexportActionPerformed(e);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		
@@ -231,7 +238,7 @@ public class EmployeeFrame extends JFrame {
 			new Object[][] {
 			},
 			new String[] {
-				"M\u00E3 h\u00E0ng", "T\u00EAn m\u1EB7t h\u00E0ng", "Gi\u00E1 ", "S\u1ED1 l\u01B0\u1EE3ng"
+				"M\u00E3 h\u00E0ng", "T\u00EAn m\u1EB7t h\u00E0ng", "Gi\u00E1 ", "S\u1ED1 l\u01B0\u1EE3ng" ,"Th\u1EC3 lo\u1EA1i"
 			}
 		));
 		scrollPane.setViewportView(tableexport);
@@ -241,7 +248,7 @@ public class EmployeeFrame extends JFrame {
 			new Object[][] {
 			},
 			new String[] {
-				"M\u00E3 h\u00E0ng ", "T\u00EAn m\u1EB7t h\u00E0ng", "Gi\u00E1 m\u1EB7t h\u00E0ng", "S\u1ED1 l\u01B0\u1EE3ng"
+				"M\u00E3 h\u00E0ng ", "T\u00EAn m\u1EB7t h\u00E0ng", "Gi\u00E1 m\u1EB7t h\u00E0ng", "S\u1ED1 l\u01B0\u1EE3ng","Th\u1EC3 lo\u1EA1i"
 			}
 		));
 		scrollPane_1.setViewportView(tableallproduct);
@@ -374,7 +381,6 @@ public class EmployeeFrame extends JFrame {
         if (e.getClickCount() != 2) {
           return;
         }
-        System.out.println("dm");
         
         new Orderonline(frame, orders.get(table.getSelectedRow())).setVisible(true);;
         
@@ -415,10 +421,10 @@ public class EmployeeFrame extends JFrame {
 		);
 		contentPane1.setLayout(gl_contentPane1);
 		
-		Connectproduct con = new Connectproduct();
-		con.Connect();
-		LoadDatatoTable load = new LoadDatatoTable(tableallproduct);
-		load.Loaddatatotable_product(con.getData_product());
+//		Connectproduct con = new Connectproduct();
+//		con.Connect();
+		LoadDataToTable load = new LoadDataToTable(tableallproduct);
+		load.Loaddatatotable_product(ProductJson.getProduct());
 		
 		statusCombox.addItemListener(new ItemListener() {
       
@@ -434,10 +440,11 @@ public class EmployeeFrame extends JFrame {
       
       @Override
       public void actionPerformed(ActionEvent e) {
-        orders = ConnectServer.getOrders(new Date(), new Date());
+        
+        orders = OrderJson.getOrder();
         subOrders = filter(orders, (Status) statusCombox.getSelectedItem());
         displayOrders(subOrders);
-        System.out.println("ok");
+        System.out.println(orders);
       }
     });
 		
@@ -459,32 +466,32 @@ public class EmployeeFrame extends JFrame {
     });
 	}
 	//btnexport
-	protected void btnexportActionPerformed(ActionEvent e) {
+	protected void btnexportActionPerformed(ActionEvent e) throws IOException {
 		// TODO Auto-generated method stub
-		Connectexport_receipt connecter = new Connectexport_receipt();
-		connecter.Connect();
-		Connectreceipt_item conitem = new Connectreceipt_item();
-		conitem.Connect();
-		Insertbigdata insertall = new Insertbigdata(tableexport);
+
 		if(tableexport.getRowCount() == 0) {
 			JOptionPane.showMessageDialog(this, "No product in table");
 		}else {
+			ArrayList<Product> array = new Product().ConvertToLArraylist(tableexport, tableexport.getModel().getRowCount());
 			ExportReceipt exp = new ExportReceipt();
-			exp.setCode(connecter.SelectID(connecter.getData_exportreceipt()));
+			exp.setCode(SelectId.SelectID_exportreceipt(ExportReceiptJson.getExportReceipt()));
 			exp.setEmployee(employee);
-			exp.setTime(new Date());
-			//insert export_product
-			connecter.insertDB_exportreceipt(exp);
-			//insert all item to receipt_item
-			insertall.insertallreceipt_item(exp);
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+			exp.setTime(df.format(new Date()));
+			exp.setItem(array);
+			//insert export
+			ExportReceiptJson.insertExportReceipt(exp);
 			//update product
-			Updateafterexport updateall =  new Updateafterexport(tableexport);
+			Updateafterexport updateall =  new Updateafterexport(array);
 			updateall.Updateall();
 			//print 
 			JFileChooser fcs = new JFileChooser();
 			String Customer = JOptionPane.showInputDialog("Customer name: ");
-			ResultSet rs = conitem.getData_receiptitem(exp.getCode());
-			int price = conitem.getPrice(rs);
+			int price = 0;
+			//return price after export
+			for(Product product : exp.getItem()) {
+				price+=product.getTotal()*product.getPrice();
+			}
 			if (fcs.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
 				String path = fcs.getSelectedFile().getAbsolutePath();
 				if (Export.printforcustomer(tableexport, path, Customer, String.valueOf(price))) {
@@ -502,10 +509,10 @@ public class EmployeeFrame extends JFrame {
 		//delete all in export
 		((DefaultTableModel)tableexport.getModel()).setNumRows(0);
 		//lupdate table product
-		Connectproduct connectp = new Connectproduct();
-		connectp.Connect();
-		LoadDatatoTable load = new LoadDatatoTable(tableallproduct);
-		load.Loaddatatotable_product(connectp.getData_product());
+    //  Connectproduct con = new Connectproduct();
+    //  con.Connect();
+      LoadDataToTable load = new LoadDataToTable(tableallproduct);
+      load.Loaddatatotable_product(ProductJson.getProduct());
 	}
 	//btndelete in exporttable
 	protected void btndeletexportActionperformed(ActionEvent e) {
@@ -531,9 +538,9 @@ public class EmployeeFrame extends JFrame {
 		}else {
 			int count = 0;
 			while(count< row.length) {
-				Object ob[] = new Object[4];
-				Product pr = new Product(tableallproduct, row[count]);
-				pr =pr.Converttoproduct();
+				Object ob[] = new Object[5];
+				Product pr = new Product();
+				pr =pr.Converttoproduct(tableallproduct, row[count]);
 				String amount = JOptionPane.showInputDialog("Amount of" + pr.getName()+ " : " );
 				if(check.isNotNumeric(amount)) {
 					JOptionPane.showMessageDialog(this, amount + " is not number.Please export again");
@@ -551,6 +558,7 @@ public class EmployeeFrame extends JFrame {
 					ob[1] = pr.getName();
 					ob[2] = pr.getPrice();
 					ob[3] = Integer.parseInt(amount);
+					ob[4] = pr.getType();
 					((DefaultTableModel)tableexport.getModel()).addRow(ob);
 					count++;
 				}
@@ -560,10 +568,10 @@ public class EmployeeFrame extends JFrame {
 	//btnshowallproduct
 	protected void btnshowallActionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		Connectproduct con = new Connectproduct();
-		con.Connect();
-		LoadDatatoTable load = new LoadDatatoTable(tableallproduct);
-		load.Loaddatatotable_product(con.getData_product());
+  //  Connectproduct con = new Connectproduct();
+  //  con.Connect();
+    LoadDataToTable load = new LoadDataToTable(tableallproduct);
+    load.Loaddatatotable_product(ProductJson.getProduct());
 	}
 	//btn findproduct
 	protected void btnfindproductActionperformed(ActionEvent arg0) {
@@ -572,7 +580,7 @@ public class EmployeeFrame extends JFrame {
 			JOptionPane.showMessageDialog(this, "You must enter name product");
 		}else {
 			FindData find  = new FindData(product_input,tableallproduct);
-			find.finddata_nameproduct();
+			find.finddata_nameproduct(ProductJson.getProduct());
 		}
 	}
 	//exitbtn
@@ -634,13 +642,11 @@ public class EmployeeFrame extends JFrame {
 	  }
 	  return result;
 	}
-  public ArrayList<Order> getSubOrders() {
-    return subOrders;
-  }
-  public void setSubOrders(ArrayList<Order> subOrders) {
-    this.subOrders = subOrders;
-  }
-	
-	
+	  public ArrayList<Order> getSubOrders() {
+	    return subOrders;
+	  }
+	  public void setSubOrders(ArrayList<Order> subOrders) {
+	    this.subOrders = subOrders;
+	  }
 	
 }

@@ -5,15 +5,15 @@ import java.util.ArrayList;
 public class Order {
   private int id;
   private String title;
-  private ArrayList<Product> products;
+  private ArrayList<Product> cart;
   private String name;
   private String phone;
   private String email;
-  private String companyName;
+  private String company_name;
   private String address1;
   private String address2;
-  private String createdAt;
-  private String updatedAt;
+  private String created_at;
+  private String updated_at;
   private Status status;
   
   public Order() {
@@ -23,19 +23,19 @@ public class Order {
   
   
   public Order(int id, String title, ArrayList<Product> products, String name, String phone, String email,
-      String companyName, String address1, String address2, String createdAt, String updatedAt, Status status) {
+      String company_name, String address1, String address2, String created_at, String updated_at, Status status) {
     super();
     this.id = id;
     this.title = title;
-    this.products = products;
+    this.cart = products;
     this.name = name;
     this.phone = phone;
     this.email = email;
-    this.companyName = companyName;
+    this.company_name = company_name;
     this.address1 = address1;
     this.address2 = address2;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
+    this.created_at = created_at;
+    this.updated_at = updated_at;
     this.status = status;
   }
 
@@ -66,13 +66,13 @@ public class Order {
 
 
   public ArrayList<Product> getProducts() {
-    return products;
+    return cart;
   }
 
 
 
   public void setProducts(ArrayList<Product> products) {
-    this.products = products;
+    this.cart = products;
   }
 
 
@@ -114,13 +114,13 @@ public class Order {
 
 
   public String getCompanyName() {
-    return companyName;
+    return company_name;
   }
 
 
 
   public void setCompanyName(String companyName) {
-    this.companyName = companyName;
+    this.company_name = companyName;
   }
 
 
@@ -150,25 +150,25 @@ public class Order {
 
 
   public String getCreatedAt() {
-    return createdAt;
+    return created_at;
   }
 
 
 
   public void setCreatedAt(String createdAt) {
-    this.createdAt = createdAt;
+    this.created_at = createdAt;
   }
 
 
 
   public String getUpdatedAt() {
-    return updatedAt;
+    return updated_at;
   }
 
 
 
   public void setUpdatedAt(String updatedAt) {
-    this.updatedAt = updatedAt;
+    this.updated_at = updatedAt;
   }
 
 
@@ -187,11 +187,12 @@ public class Order {
 
   public long countTotal() {
     long total = 0;
-    for (Product product : products) {
+    for (Product product : cart) {
       total += product.getPrice() * product.getTotal();
     }
     
     return total;
   }
+
   
 }

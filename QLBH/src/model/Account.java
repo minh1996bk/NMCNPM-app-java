@@ -2,39 +2,39 @@ package model;
 
 
 public class Account {
-	   private int id;
-       private String TaiKhoan;
-       private String MatKhau;
+	   private int id_employee;
+     private String user_name;
+     private String password;
 
    public Account(String TaiKhoan, String MatKhau) {
-       this.TaiKhoan = TaiKhoan;
-       this.MatKhau = MatKhau;
+       this.user_name = TaiKhoan;
+       this.password = MatKhau;
    }
 
    public Account() {
    }
    
    public String getTaiKhoan() {
-       return TaiKhoan;
+       return user_name;
    }
 
    public void setTaiKhoan(String TaiKhoan) {
-       this.TaiKhoan = TaiKhoan;
+       this.user_name = TaiKhoan;
    }
 
    public String getMatKhau() {
-       return MatKhau;
+       return password;
    }
 
    public void setMatKhau(String MatKhau) {
-       this.MatKhau = MatKhau;
+       this.password = MatKhau;
    }
 
 public int getId() {
-	return id;
+	return id_employee;
 }
 
 public void setId(int id) {
-	this.id = id;
+	this.id_employee = id;
 }
 }

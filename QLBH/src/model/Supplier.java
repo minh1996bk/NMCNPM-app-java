@@ -1,28 +1,28 @@
 package model;
 
 public class Supplier {
-  private int idNumber;
+  private int id;
   private String name;
   private String address;
-  private String email;
-  private String phoneNumber;
+  private String mail;
+  private String phone_no;
   
   public Supplier() {
     
   }
   public Supplier(int idNumber,String name, String address, String email, String phone) {
-	  this.idNumber = idNumber;
+	  this.id = idNumber;
 	  this.name = name;
 	  this.address = address;
-	  this.email = email;
-	  this.phoneNumber = phone;
+	  this.mail = email;
+	  this.phone_no = phone;
   }
   public int getIdNumber() {
-    return idNumber;
+    return id;
   }
 
   public void setIdNumber(int idNumber) {
-    this.idNumber = idNumber;
+    this.id = idNumber;
   }
 
   public String getName() {
@@ -42,19 +42,19 @@ public class Supplier {
   }
   
   public String getEmail() {
-    return email;
+    return mail;
   }
 
   public void setEmail(String email) {
-    this.email = email;
+    this.mail = email;
   }
 
   public String getPhoneNumber() {
-    return phoneNumber;
+    return phone_no;
   }
 
   public void setPhoneNumber(String phoneNumber) {
-    this.phoneNumber = phoneNumber;
+    this.phone_no = phoneNumber;
   }
   
   /**
@@ -63,7 +63,7 @@ public class Supplier {
    */
   
   public String[] toArrayString() {
-    String[] array = {"" + this.idNumber, this.address, this.name, this.email, this.phoneNumber};
+    String[] array = {"" + this.id, this.address, this.name, this.mail, this.phone_no};
     return array;
   }
 

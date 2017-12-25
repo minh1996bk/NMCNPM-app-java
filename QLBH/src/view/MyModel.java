@@ -3,7 +3,12 @@ package view;
 import javax.swing.table.DefaultTableModel;
 
 public class MyModel extends DefaultTableModel {
-  public MyModel(String[] columnNames) {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+public MyModel(String[] columnNames) {
     super(columnNames, 0);
   }
   

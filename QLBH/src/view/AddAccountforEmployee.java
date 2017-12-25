@@ -3,7 +3,8 @@ package view;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import connectsql.Connectaccount;
+import connectJson.AccountJson;
+import controlJson.CheckImformation;
 import model.Account;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -13,6 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 
 public class AddAccountforEmployee extends JFrame {
@@ -26,6 +28,7 @@ public class AddAccountforEmployee extends JFrame {
 	private JTextField textPass;
 	private int id;
 	private ManagerFrame frame;
+	private JButton btnThot;
 
 	/**
 	 * Launch the application.
@@ -39,7 +42,7 @@ public class AddAccountforEmployee extends JFrame {
 		this.setId(id) ;
 		this.setFrame(frame);
 		setLocationRelativeTo(this);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 466, 314);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -61,6 +64,13 @@ public class AddAccountforEmployee extends JFrame {
 				btnSaveAccountactionPerformed(arg0);
 			}
 		});
+		
+		btnThot = new JButton("Thoát");
+		btnThot.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				btnThotActionperformed(arg0);
+			}
+		});
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -74,8 +84,11 @@ public class AddAccountforEmployee extends JFrame {
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(lblMtKhu, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
 							.addGap(18)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(btnSaveAccount, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(btnSaveAccount, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(btnThot, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE))
 								.addComponent(textPass, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE))))
 					.addContainerGap(103, Short.MAX_VALUE))
 		);
@@ -91,27 +104,33 @@ public class AddAccountforEmployee extends JFrame {
 						.addComponent(lblMtKhu, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
 						.addComponent(textPass, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
-					.addComponent(btnSaveAccount, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnSaveAccount, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnThot, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
 					.addGap(66))
 		);
 		contentPane.setLayout(gl_contentPane);
 	}
+	protected void btnThotActionperformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		frame.setEnabled(true);
+		this.dispose();
+	}
 	//btnsave
 	protected void btnSaveAccountactionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		Connectaccount connectacount = new Connectaccount();
-		connectacount.Connect();
+		CheckImformation check = new CheckImformation();
 		if(textAccount.getText().equals("")||textPass.getText().equals("")) {
 			JOptionPane.showMessageDialog(this, "You must fill account and pass");
 		}else {
-			if(connectacount.Checkaccount(connectacount.getData_account(), textAccount, textPass)) {
+			if(check.Checkaccount(AccountJson.getAccount(), textAccount, textPass)) {
 				JOptionPane.showMessageDialog(this, "Account is existent.Please Creat other Account");
 			}else {
 				Account account = new Account();
 				account.setId(id);
 				account.setTaiKhoan(textAccount.getText());
 				account.setMatKhau(textPass.getText());
-				connectacount.insertDB_account(account);
+				AccountJson.insertAccount(account);
 				frame.setEnabled(true);
 				this.dispose();
 			}
@@ -145,5 +164,4 @@ public class AddAccountforEmployee extends JFrame {
 	public void setId(int id) {
 		this.id = id;
 	}
-
 }

@@ -15,29 +15,32 @@ import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
-import control.CheckImformation;
-import control.Export;
-import control.FindData;
-import control.LoadDatatoTable;
-import control.RemmeberAccount;
-import control.statistic;
+import controlJson.CheckImformation;
+import controlJson.Export;
+import controlJson.FindData;
+import controlJson.LoadDataToTable;
+import controlJson.SelectId;
+import controlJson.statistic;
 import model.Employee;
 import model.Manager;
 import model.Product;
 import java.awt.event.ActionListener;
-import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import com.toedter.calendar.JDateChooser;
-import connectsql.ConnectImport_receipt;
-import connectsql.Connectaccount;
-import connectsql.Connectemployee;
-import connectsql.Connectexport_receipt;
-import connectsql.Connectproduct;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.SwingConstants;
 import com.toedter.calendar.JMonthChooser;
 import com.toedter.calendar.JYearChooser;
+import connectJson.AccountJson;
+import connectJson.EmployeeJson;
+import connectJson.ExportReceiptJson;
+import connectJson.ImportReceiptJson;
+import connectJson.OrderJson;
+import connectJson.ProductJson;
+import connectJson.SupplierJson;
+
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseEvent;
 
@@ -47,6 +50,8 @@ public class ManagerFrame extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private	Employee employee;
+	
 	private JPanel contentPane;
 	private JTextField text_account;
 	private JTextField input;
@@ -81,6 +86,11 @@ public class ManagerFrame extends JFrame {
 	private JDateChooser exportdate;
 	private JButton btnfindexport;
 	private JLabel Label_statistic;
+	private JTable table_exportonline;
+	private JComboBox<String> comboBox;
+	private JButton btnfindorder;
+	private JTable table_supplier;
+	private JButton AddSupplier;
 
 	/**
 	 * Launch the application.
@@ -90,10 +100,11 @@ public class ManagerFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ManagerFrame() {
+	public ManagerFrame(Employee employee) {
+		this.setEmployee(employee);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
-		setBounds(100, 100, 875, 609);
+		setLocationRelativeTo(this);
+		setBounds(100, 100, 971, 627);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -104,7 +115,7 @@ public class ManagerFrame extends JFrame {
 		
 		text_account = new JTextField();
 		text_account.setColumns(10);
-		text_account.setText(RemmeberAccount.getUserlogin());
+		text_account.setText(employee.getName());
 		
 		JButton btnNewButton = new JButton("Đăng xuất");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -130,24 +141,25 @@ public class ManagerFrame extends JFrame {
 		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addComponent(lblNgiDng, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(text_account, GroupLayout.PREFERRED_SIZE, 114, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
-					.addComponent(lblThiGian, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(textTime, GroupLayout.PREFERRED_SIZE, 114, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 270, Short.MAX_VALUE)
-					.addComponent(btnNewButton)
-					.addGap(18)
-					.addComponent(btnNewButton_5, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
-					.addGap(185))
-				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 853, GroupLayout.PREFERRED_SIZE)
-					.addGap(176))
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(lblNgiDng, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(text_account, GroupLayout.PREFERRED_SIZE, 114, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(lblThiGian, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(textTime, GroupLayout.PREFERRED_SIZE, 114, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, 342, Short.MAX_VALUE)
+							.addComponent(btnNewButton)
+							.addGap(37)
+							.addComponent(btnNewButton_5, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addContainerGap(21, Short.MAX_VALUE)
+							.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 914, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap())
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -156,13 +168,13 @@ public class ManagerFrame extends JFrame {
 						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 							.addComponent(lblNgiDng, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
 							.addComponent(text_account, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-							.addComponent(btnNewButton)
-							.addComponent(btnNewButton_5))
+							.addComponent(btnNewButton_5)
+							.addComponent(btnNewButton))
 						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 							.addComponent(lblThiGian, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
 							.addComponent(textTime, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE))
+					.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE))
 		);
 		
 		JPanel panel = new JPanel();
@@ -212,22 +224,22 @@ public class ManagerFrame extends JFrame {
 		gl_panel_6.setHorizontalGroup(
 			gl_panel_6.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panel_6.createSequentialGroup()
-					.addGap(54)
 					.addGroup(gl_panel_6.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnNewButton_2, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
 						.addGroup(gl_panel_6.createSequentialGroup()
-							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
+							.addGap(46)
+							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(combox_employee, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
 							.addGap(18)
 							.addComponent(input, GroupLayout.PREFERRED_SIZE, 254, GroupLayout.PREFERRED_SIZE)
 							.addGap(30)
-							.addComponent(btnFindEmployee)))
-					.addContainerGap(223, Short.MAX_VALUE))
-				.addGroup(gl_panel_6.createSequentialGroup()
-					.addContainerGap(70, Short.MAX_VALUE)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 713, GroupLayout.PREFERRED_SIZE)
-					.addGap(67))
+							.addComponent(btnFindEmployee, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel_6.createSequentialGroup()
+							.addGap(70)
+							.addGroup(gl_panel_6.createParallelGroup(Alignment.LEADING)
+								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 713, GroupLayout.PREFERRED_SIZE)
+								.addComponent(btnNewButton_2, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE))))
+					.addContainerGap(67, Short.MAX_VALUE))
 		);
 		gl_panel_6.setVerticalGroup(
 			gl_panel_6.createParallelGroup(Alignment.LEADING)
@@ -235,15 +247,15 @@ public class ManagerFrame extends JFrame {
 					.addGap(69)
 					.addGroup(gl_panel_6.createParallelGroup(Alignment.LEADING, false)
 						.addGroup(gl_panel_6.createParallelGroup(Alignment.BASELINE)
-							.addComponent(input, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
-							.addComponent(btnFindEmployee, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
+							.addComponent(input, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
+							.addComponent(btnFindEmployee, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_panel_6.createParallelGroup(Alignment.BASELINE)
-							.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
-							.addComponent(combox_employee, GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)))
-					.addGap(45)
+							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
+							.addComponent(combox_employee, GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)))
+					.addGap(30)
 					.addComponent(btnNewButton_2, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 237, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE)
 					.addGap(27))
 		);
 		
@@ -300,22 +312,22 @@ public class ManagerFrame extends JFrame {
 							.addComponent(inputp, GroupLayout.PREFERRED_SIZE, 268, GroupLayout.PREFERRED_SIZE)
 							.addGap(18)
 							.addComponent(btnfindproduct, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(57, Short.MAX_VALUE))
+					.addContainerGap(68, Short.MAX_VALUE))
 		);
 		gl_panel_7.setVerticalGroup(
 			gl_panel_7.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_7.createSequentialGroup()
 					.addGap(73)
 					.addGroup(gl_panel_7.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel_1, GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
-						.addComponent(combox_product, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
-						.addComponent(inputp, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnfindproduct, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-					.addGap(40)
-					.addComponent(btnNewButton_4, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-					.addGap(29)
-					.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 240, GroupLayout.PREFERRED_SIZE)
-					.addGap(34))
+						.addComponent(lblNewLabel_1, GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
+						.addComponent(combox_product, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
+						.addComponent(inputp, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnfindproduct, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addComponent(btnNewButton_4, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
+					.addGap(28)
+					.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 270, GroupLayout.PREFERRED_SIZE)
+					.addGap(22))
 		);
 		
 		table_1 = new JTable();
@@ -323,7 +335,7 @@ public class ManagerFrame extends JFrame {
 			new Object[][] {
 			},
 			new String[] {
-				"ID", "T\u00EAn m\u1EB7t h\u00E0ng", "Gi\u00E1", "S\u1ED1 l\u01B0\u1EE3ng"
+				"ID", "T\u00EAn m\u1EB7t h\u00E0ng", "Gi\u00E1", "S\u1ED1 l\u01B0\u1EE3ng", "Th\u1EC3 lo\u1EA1i"
 			}
 		));
 		scrollPane_1.setViewportView(table_1);
@@ -391,14 +403,14 @@ public class ManagerFrame extends JFrame {
 		employee_position = new JComboBox<String>();
 		employee_position.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(employee_position.getSelectedItem().equals("employee")||employee_position.getSelectedItem().equals("shipper")) {
+				if(employee_position.getSelectedItem().equals("employee")) {
 					employee_commission.setEnabled(false);
 				}else {
 					employee_commission.setEnabled(true);
 				}
 			}
 		});
-		employee_position.setModel(new DefaultComboBoxModel<String>(new String[] {"", "employee", "manager", "shipper"}));
+		employee_position.setModel(new DefaultComboBoxModel<String>(new String[] {"", "employee", "manager"}));
 		
 		JButton CreatAccout = new JButton("Thêm tài khoản");
 		CreatAccout.addActionListener(new ActionListener() {
@@ -468,8 +480,8 @@ public class ManagerFrame extends JFrame {
 			gl_panel_1.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_1.createSequentialGroup()
 					.addGap(19)
-					.addComponent(button_2, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
+					.addComponent(button_2, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(scrollPane_2, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
 					.addGap(43)
 					.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
@@ -522,7 +534,7 @@ public class ManagerFrame extends JFrame {
 			new Object[][] {
 			},
 			new String[] {
-				"ID", "T\u00EAn nh\u00E2n vi\u00EAn", "Gi\u1EDBi t\u00EDnh", "\u0110\u1ECBa ch\u1EC9", "Ng\u00E0y sinh", "S\u1ED1 \u0111i\u1EC7n tho\u1EA1i", "H\u1EC7 s\u1ED1 l\u01B0\u01A1ng", "V\u1ECB tr\u00ED"
+				"ID", "T\u00EAn nh\u00E2n vi\u00EAn", "Gi\u1EDBi t\u00EDnh", "Ng\u00E0y sinh", "\u0110\u1ECBa ch\u1EC9", "S\u1ED1 \u0111i\u1EC7n tho\u1EA1i", "H\u1EC7 s\u1ED1 l\u01B0\u01A1ng", "V\u1ECB tr\u00ED"
 			}
 		));
 		scrollPane_2.setViewportView(table_employee);
@@ -584,15 +596,16 @@ public class ManagerFrame extends JFrame {
 									.addComponent(product_price, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE))
 								.addComponent(btnUpdateProduct, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE))
 							.addGap(184))
-						.addComponent(scrollPane_3, GroupLayout.PREFERRED_SIZE, 706, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnLoadproduct, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+							.addComponent(btnLoadproduct, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
+							.addComponent(scrollPane_3, GroupLayout.PREFERRED_SIZE, 706, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap(78, Short.MAX_VALUE))
 		);
 		gl_panel_2.setVerticalGroup(
 			gl_panel_2.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_2.createSequentialGroup()
-					.addGap(59)
-					.addComponent(btnLoadproduct)
+					.addGap(52)
+					.addComponent(btnLoadproduct, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
 					.addComponent(scrollPane_3, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
@@ -615,11 +628,56 @@ public class ManagerFrame extends JFrame {
 			new Object[][] {
 			},
 			new String[] {
-				"ID", "T\u00EAn m\u1EB7t h\u00E0ng", "Gi\u00E1", "S\u1ED1 l\u01B0\u1EE3ng"
+				"ID", "T\u00EAn m\u1EB7t h\u00E0ng", "Gi\u00E1", "S\u1ED1 l\u01B0\u1EE3ng", "Th\u1EC3 lo\u1EA1i"
 			}
 		));
 		scrollPane_3.setViewportView(table_product);
 		panel_2.setLayout(gl_panel_2);
+		
+		JPanel panel_9 = new JPanel();
+		tabbedPane.addTab("Nhà cung cấp", null, panel_9, null);
+		
+		JScrollPane scrollPane_8 = new JScrollPane();
+		
+		AddSupplier = new JButton("Thêm nhà cung cấp");
+		AddSupplier.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				AddSupplierActionperformed(arg0);
+			}
+		});
+		GroupLayout gl_panel_9 = new GroupLayout(panel_9);
+		gl_panel_9.setHorizontalGroup(
+			gl_panel_9.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_9.createSequentialGroup()
+					.addContainerGap(79, Short.MAX_VALUE)
+					.addGroup(gl_panel_9.createParallelGroup(Alignment.LEADING)
+						.addGroup(Alignment.TRAILING, gl_panel_9.createSequentialGroup()
+							.addComponent(scrollPane_8, GroupLayout.PREFERRED_SIZE, 696, GroupLayout.PREFERRED_SIZE)
+							.addGap(73))
+						.addGroup(Alignment.TRAILING, gl_panel_9.createSequentialGroup()
+							.addComponent(AddSupplier, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
+							.addGap(340))))
+		);
+		gl_panel_9.setVerticalGroup(
+			gl_panel_9.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_9.createSequentialGroup()
+					.addGap(62)
+					.addComponent(scrollPane_8, GroupLayout.PREFERRED_SIZE, 315, GroupLayout.PREFERRED_SIZE)
+					.addGap(45)
+					.addComponent(AddSupplier, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(56, Short.MAX_VALUE))
+		);
+		
+		table_supplier = new JTable();
+		table_supplier.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"M\u00E3 ng\u01B0\u1EDDi cung c\u1EA5p", "T\u00EAn ng\u01B0\u1EDDi cung c\u1EA5p", "\u0110\u1ECBa ch\u1EC9 ", "Mail", "S\u1ED1 \u0111i\u1EC7n tho\u1EA1i"
+			}
+		));
+		scrollPane_8.setViewportView(table_supplier);
+		panel_9.setLayout(gl_panel_9);
 		
 		JPanel panel_3 = new JPanel();
 		tabbedPane.addTab("Qu\u1EA3n l\u00FD nh\u1EADp kho", null, panel_3, null);
@@ -706,7 +764,7 @@ public class ManagerFrame extends JFrame {
 		panel_3.setLayout(gl_panel_3);
 		
 		JPanel panel_4 = new JPanel();
-		tabbedPane.addTab("Qu\u1EA3n l\u00FD xu\u1EA5t kho", null, panel_4, null);
+		tabbedPane.addTab("Quản lý xuất kho offline", null, panel_4, null);
 		
 		JLabel lblNewLabel_4 = new JLabel("Xuất Kho Ngày");
 		lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
@@ -763,7 +821,7 @@ public class ManagerFrame extends JFrame {
 						.addGroup(gl_panel_4.createParallelGroup(Alignment.BASELINE)
 							.addComponent(lblNgiXutKho, GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
 							.addComponent(export_name, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)))
-					.addPreferredGap(ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
 					.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING, false)
 						.addComponent(lblNewLabel_4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(exportdate, GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
@@ -784,6 +842,64 @@ public class ManagerFrame extends JFrame {
 		));
 		scrollPane_5.setViewportView(tableexport);
 		panel_4.setLayout(gl_panel_4);
+		
+		JPanel panel_8 = new JPanel();
+		tabbedPane.addTab("Quản lý xuất kho online", null, panel_8, null);
+		
+		JLabel lblNewLabel_6 = new JLabel("Trạng thái ");
+		lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		comboBox = new JComboBox<String>();
+		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"", "waiting", "accepted", "shipping", "canceled", "completed", "all"}));
+		
+		btnfindorder = new JButton("Tìm kiếm");
+		btnfindorder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				btnfindorderActionPerformed(arg0);
+			}
+		});
+		
+		JScrollPane scrollPane_7 = new JScrollPane();
+		GroupLayout gl_panel_8 = new GroupLayout(panel_8);
+		gl_panel_8.setHorizontalGroup(
+			gl_panel_8.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_8.createSequentialGroup()
+					.addGroup(gl_panel_8.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_8.createSequentialGroup()
+							.addGap(227)
+							.addComponent(lblNewLabel_6, GroupLayout.PREFERRED_SIZE, 103, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(btnfindorder, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel_8.createSequentialGroup()
+							.addGap(46)
+							.addComponent(scrollPane_7, GroupLayout.PREFERRED_SIZE, 773, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(29, Short.MAX_VALUE))
+		);
+		gl_panel_8.setVerticalGroup(
+			gl_panel_8.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_8.createSequentialGroup()
+					.addGap(58)
+					.addGroup(gl_panel_8.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblNewLabel_6, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnfindorder, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE))
+					.addGap(38)
+					.addComponent(scrollPane_7, GroupLayout.PREFERRED_SIZE, 357, GroupLayout.PREFERRED_SIZE)
+					.addGap(22))
+		);
+		
+		table_exportonline = new JTable();
+		table_exportonline.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"M\u00E3 Order", "Ng\u01B0\u1EDDi \u0111\u1EB7t h\u00E0ng", "S\u1ED1 \u0111i\u1EC7n tho\u1EA1i", "\u0110\u1ECBa ch\u1EC9", "Email", "Ng\u00E0y \u0111\u1EB7t h\u00E0ng", "M\u00E3 h\u00E0ng ", "S\u1ED1 l\u01B0\u1EE3ng", "Th\u1EC3 lo\u1EA1i", "Tr\u1EA1ng th\u00E1i"
+			}
+		));
+		scrollPane_7.setViewportView(table_exportonline);
+		panel_8.setLayout(gl_panel_8);
 		
 		JPanel panel_5 = new JPanel();
 		tabbedPane.addTab("Th\u1ED1ng k\u00EA", null, panel_5, null);
@@ -830,8 +946,8 @@ public class ManagerFrame extends JFrame {
 		gl_panel_5.setHorizontalGroup(
 			gl_panel_5.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panel_5.createSequentialGroup()
-					.addContainerGap(132, Short.MAX_VALUE)
-					.addGroup(gl_panel_5.createParallelGroup(Alignment.TRAILING)
+					.addContainerGap(89, Short.MAX_VALUE)
+					.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_5.createSequentialGroup()
 							.addComponent(lblNewLabel_5, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
@@ -842,23 +958,21 @@ public class ManagerFrame extends JFrame {
 									.addComponent(btnStatistic, GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE))
 								.addGroup(gl_panel_5.createParallelGroup(Alignment.TRAILING, false)
 									.addComponent(yearChooser, Alignment.LEADING, 0, 0, Short.MAX_VALUE)
-									.addComponent(monthChooser, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)))
-							.addContainerGap(234, Short.MAX_VALUE))
-						.addGroup(gl_panel_5.createSequentialGroup()
+									.addComponent(monthChooser, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE))))
+						.addComponent(Label_statistic, GroupLayout.PREFERRED_SIZE, 307, GroupLayout.PREFERRED_SIZE)
+						.addGroup(Alignment.TRAILING, gl_panel_5.createSequentialGroup()
 							.addGroup(gl_panel_5.createParallelGroup(Alignment.TRAILING)
-								.addComponent(scrollPane_6, GroupLayout.PREFERRED_SIZE, 592, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnExporttoExcelFile))
-							.addGap(124))
-						.addGroup(Alignment.LEADING, gl_panel_5.createSequentialGroup()
-							.addComponent(Label_statistic, GroupLayout.PREFERRED_SIZE, 307, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap())))
+								.addComponent(btnExporttoExcelFile)
+								.addComponent(scrollPane_6, GroupLayout.PREFERRED_SIZE, 672, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.RELATED)))
+					.addContainerGap(167, Short.MAX_VALUE))
 		);
 		gl_panel_5.setVerticalGroup(
 			gl_panel_5.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_5.createSequentialGroup()
 					.addGap(39)
 					.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblNewLabel_5, GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
+						.addComponent(lblNewLabel_5, GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
 						.addGroup(gl_panel_5.createParallelGroup(Alignment.BASELINE)
 							.addComponent(combox_statistic, GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
 							.addComponent(btnStatistic, GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)))
@@ -893,15 +1007,65 @@ public class ManagerFrame extends JFrame {
 		scrollPane_6.setViewportView(table_statistic);
 		panel_5.setLayout(gl_panel_5);
 		contentPane.setLayout(gl_contentPane);
+		
+		//load employee in finding
+//		Connectemployee connectemployee = new Connectemployee();
+//		connectemployee.Connect();
+		LoadDataToTable load = new LoadDataToTable(table);
+		load.Loaddatatotable_employee(EmployeeJson.getEmployee());
+		//load product in finding
+//		Connectproduct connectproduct = new Connectproduct();
+//		connectproduct.Connect();
+		LoadDataToTable loadproduct = new LoadDataToTable(table_1);
+		loadproduct.Loaddatatotable_product(ProductJson.getProduct());
+		
+		
+		//load all employee table employee 
+//		connectemployee.Connect();
+		LoadDataToTable loademployee = new LoadDataToTable(table_employee);
+		loademployee.Loaddatatotable_employee(EmployeeJson.getEmployee()); /////////////////////////////// Set table employee
+		
+		//load all product in product table
+		LoadDataToTable loadproducttable = new LoadDataToTable(table_product);
+		loadproducttable.Loaddatatotable_product(ProductJson.getProduct());
+		// load all import action 
+//		ConnectImport_receipt connectImport_receipt = new ConnectImport_receipt();
+//		connectImport_receipt.Connect();
+		LoadDataToTable loadimport = new LoadDataToTable(importtable);
+		loadimport.Loaddatatotable_Import(ImportReceiptJson.getImportReceipt());
+		
+		//load all export action
+//		Connectexport_receipt connectexport_receipt = new Connectexport_receipt();
+//		connectexport_receipt.Connect();
+		LoadDataToTable loadexport = new LoadDataToTable(tableexport);
+		loadexport.Loaddatatotable_Export(ExportReceiptJson.getExportReceipt());
+		//load all supplier
+		LoadDataToTable loadsupplier = new LoadDataToTable(table_supplier);
+		loadsupplier.loaddatatotable_supplier(SupplierJson.getSupplier());
 	}
+	//add supplier
+	protected void AddSupplierActionperformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		Addsupplier frame = new  Addsupplier();
+		frame.setVisible(true);
+	}
+
+	//find order and statistic order
+	protected void btnfindorderActionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		FindData findorder = new FindData(table_exportonline,String.valueOf(comboBox.getSelectedItem()));
+		findorder.finddata_export_online(OrderJson.getOrder());
+	}
+	
 	//showallproduct
 	protected void btnNewButton_4showallproductActionperformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		Connectproduct connectproduct = new Connectproduct();
-		connectproduct.Connect();
-		LoadDatatoTable load = new LoadDatatoTable(table_1);
-		load.Loaddatatotable_product(connectproduct.getData_product());
+//		Connectproduct connectproduct = new Connectproduct();
+//		connectproduct.Connect();
+		LoadDataToTable load = new LoadDataToTable(table_1);
+		load.Loaddatatotable_product(ProductJson.getProduct());
 	}
+	
 	//find export depend on input
 	protected void btnfindexportActionperformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -911,24 +1075,25 @@ public class ManagerFrame extends JFrame {
         	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         	String str = sdf.format(exportdate.getDate());
         	FindData find = new FindData( tableexport,str);
-        	find.finddata_Export_date();
+        	find.finddata_Export_date(ExportReceiptJson.getExportReceipt());
         }if(exportdate.getDate()==null && !export_name.getText().equals("")) {
         	FindData find = new FindData(tableexport, export_name.getText());
-        	find.finddata_Export_name();
+        	find.finddata_Export_name(ExportReceiptJson.getExportReceipt());
         }if(exportdate.getDate()!=null && !export_name.getText().equals("")) {
         	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         	String str = sdf.format(exportdate.getDate());
         	FindData find = new FindData(tableexport,export_name.getText(),str);
-        	find.finddata_Export_namedate();
+        	find.finddata_Export_namedate(ExportReceiptJson.getExportReceipt());
         }
 	}
+	
 	//show all export 
 	protected void btnshowallexportActionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		Connectexport_receipt connectexport_receipt = new Connectexport_receipt();
-		connectexport_receipt.Connect();
-		LoadDatatoTable load = new LoadDatatoTable(tableexport);
-		load.Loaddatatotable_Export(connectexport_receipt.getData_exportdetails());
+//		Connectexport_receipt connectexport_receipt = new Connectexport_receipt();
+//		connectexport_receipt.Connect();
+		LoadDataToTable load = new LoadDataToTable(tableexport);
+		load.Loaddatatotable_Export(ExportReceiptJson.getExportReceipt());
 	}
 	//btn export to excel 
 	protected void btnExporttoExcelFileActionperformed(ActionEvent arg0) {
@@ -947,16 +1112,16 @@ public class ManagerFrame extends JFrame {
 		// TODO Auto-generated method stub
 		statistic stt = new statistic(table_statistic, monthChooser, yearChooser);
 		if(combox_statistic.getSelectedIndex()==1) {
-			stt.Statistic_Salary();
+			stt.Statistic_Salary(EmployeeJson.getEmployee());
 		}
 		if(combox_statistic.getSelectedIndex()==2) {
-			stt.Statistic_Import();
+			stt.Statistic_Import(ImportReceiptJson.getImportReceipt());
 		}
 		if(combox_statistic.getSelectedIndex()==3) {
-			stt.statistic_exportoff();
+			stt.statistic_exportoff(ExportReceiptJson.getExportReceipt());
 		}
 		if(combox_statistic.getSelectedIndex()==4) {
-			
+			stt.statistic_exportonline(OrderJson.getOrder());
 		}
 	}
 	//find import depend on input
@@ -968,34 +1133,34 @@ public class ManagerFrame extends JFrame {
         	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         	String str = sdf.format(dateimport.getDate());
         	FindData find = new FindData( importtable,str);
-        	find.finddata_Import_date();
+        	find.finddata_Import_date(ImportReceiptJson.getImportReceipt());
         }if(dateimport.getDate()==null && !import_name.getText().equals("")) {
         	FindData find = new FindData(importtable, import_name.getText());
-        	find.finddata_Import_name();
+        	find.finddata_Import_name(ImportReceiptJson.getImportReceipt());
         }if(dateimport.getDate()!=null && !import_name.getText().equals("")) {
         	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         	String str = sdf.format(dateimport.getDate());
         	FindData find = new FindData(importtable,import_name.getText(),str);
-        	find.finddata_Import_namedate();
+        	find.finddata_Import_namedate(ImportReceiptJson.getImportReceipt());
         }
 		
 	}
 	//show all import 
 	protected void btnshowallimportActionperformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		ConnectImport_receipt connectImport_receipt = new ConnectImport_receipt();
-		connectImport_receipt.Connect();
-		LoadDatatoTable load = new LoadDatatoTable(importtable);
-		load.Loaddatatotable_Import(connectImport_receipt.getData_importdetails());
+//		ConnectImport_receipt connectImport_receipt = new ConnectImport_receipt();
+//		connectImport_receipt.Connect();
+		LoadDataToTable load = new LoadDataToTable(importtable);
+		load.Loaddatatotable_Import(ImportReceiptJson.getImportReceipt());
 	}
 	//btnImportAction
 	protected void btnImportActionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		Connectemployee con = new Connectemployee();
-		con.Connect();
-		int id = RemmeberAccount.TakeoutAccountlogin().getId();
-		Manager manager = new Manager();
-		manager = manager.Converttomanager(con.getData_employee(id));
+//		Connectemployee con = new Connectemployee();
+//		con.Connect();
+		int id = employee.getIdNumber();
+		
+		Manager manager = EmployeeJson.getManagerById(id);
 		AddImportReceipt1 ir = new AddImportReceipt1(manager,this); 
 		this.setEnabled(false);
 		ir.setVisible(true);		
@@ -1007,7 +1172,7 @@ public class ManagerFrame extends JFrame {
             JOptionPane.showMessageDialog(null,"You must enter inputtext and select values of combobox");
         }else{
         	FindData find = new FindData(combox_product.getSelectedIndex(), inputp, table_1);
-        	find.finddata_product();
+        	find.finddata_product(ProductJson.getProduct());
         }
 	}
 
@@ -1019,8 +1184,8 @@ public class ManagerFrame extends JFrame {
 			JOptionPane.showMessageDialog(this, "You must select a row to update");
 		}
 		else {
-			Product product = new Product(table_product ,row);
-			product = product.Converttoproduct();
+			Product product = new Product();
+			product = product.Converttoproduct(table_product ,row);
 			Updateproduct1 update= new Updateproduct1(product,this);
 			this.setEnabled(false);
 			update.setVisible(true);
@@ -1029,10 +1194,10 @@ public class ManagerFrame extends JFrame {
 	//Load data in producttable to Jtable
 	protected void btnloadproductActionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		Connectproduct connectproduct = new Connectproduct();
-		connectproduct.Connect();
-		LoadDatatoTable load = new LoadDatatoTable(table_product);
-		load.Loaddatatotable_product(connectproduct.getData_product());
+//		Connectproduct connectproduct = new Connectproduct();
+//		connectproduct.Connect();
+		LoadDataToTable load = new LoadDataToTable(table_product);
+		load.Loaddatatotable_product(ProductJson.getProduct());
 	}
 	// FindEmployee Button  depend on combox and input 
 	protected void btnFindemployeeActionPerformed(ActionEvent arg0) {
@@ -1041,39 +1206,37 @@ public class ManagerFrame extends JFrame {
             JOptionPane.showMessageDialog(null,"You must enter inputtext and select values of combobox");
         }else{
         	FindData find = new FindData(combox_employee.getSelectedIndex(), input, table);
-        	find.finddata_employee();
+        	find.finddata_employee(EmployeeJson.getEmployee());
         }
 	}
 	//show all data in employeetable
 	protected void btnShowalldatainEmployeeTableActionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		Connectemployee connectemployee = new Connectemployee();
-		connectemployee.Connect();
-		LoadDatatoTable load = new LoadDatatoTable(table);
-		load.Loaddatatotable_employee(connectemployee.getData_employee());
+//		Connectemployee connectemployee = new Connectemployee();
+//		connectemployee.Connect();
+		LoadDataToTable load = new LoadDataToTable(table);
+		load.Loaddatatotable_employee(EmployeeJson.getEmployee());
 		
 	}
 	//button CreatAccount for Employee
 	protected void btnCreatAccoutActionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		// TODO Auto-generated method stub
+		CheckImformation check = new CheckImformation();
 		int row = table_employee.getSelectedRow();
 		if(row == -1) {
 			JOptionPane.showMessageDialog(this, "You must select a row to update");
 		}
 		else {
-			Connectaccount connectacount = new Connectaccount();
-			connectacount.Connect();
 			int id = (int) table_employee.getModel().getValueAt(row, 0);
-			if(connectacount.ChecksuvirvalofAccount(connectacount.getData_account(), id)) {
-				return;
+			if(check.ChecksuvirvalofAccount(AccountJson.getAccount(), id)){
+				JOptionPane.showMessageDialog(this, "Can't add account because user had a account");
 			}else {
 				AddAccountforEmployee addaccount = new AddAccountforEmployee(id , this); 
 				this.setEnabled(false);
 				addaccount.setVisible(true);
-			}	
-		}
-	}
+				}	
+			}
+		}	
 	
 	//button updateEmployee
 	protected void btnupdateemployeeActionPerformed(ActionEvent e) {
@@ -1083,15 +1246,11 @@ public class ManagerFrame extends JFrame {
 			JOptionPane.showMessageDialog(this, "You must select a row to update");
 		}
 		else {
-			Employee employee = new Employee(table_employee ,row);
-			employee = employee.ConverttoEmployee();
-			if(employee.getPosition().equals("shipper")) {
-				JOptionPane.showMessageDialog(this, "shipper can not update");
-			}else {
-				Updateemployee update= new Updateemployee(employee,this);	
+			Employee employee = new Employee();
+			employee = employee.ConverttoEmployee(table_employee ,row);
+			Updateemployee update= new Updateemployee(employee,this);	
 			this.setEnabled(false);
 			update.setVisible(true);
-			}
 		}
 	}
 	//button exit
@@ -1104,18 +1263,16 @@ public class ManagerFrame extends JFrame {
 	//Loaddata to table in personnel management
 	protected void BtnUpdateInAddEmployeeActionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		Connectemployee connectemployee = new Connectemployee();
-		connectemployee.Connect();
-		LoadDatatoTable load = new LoadDatatoTable(table_employee);
-		load.Loaddatatotable_employee(connectemployee.getData_employee());
+//		Connectemployee connectemployee = new Connectemployee();
+//		connectemployee.Connect();
+		LoadDataToTable load = new LoadDataToTable(table_employee);
+		load.Loaddatatotable_employee(EmployeeJson.getEmployee());
 		
 	}
 
 	//AddEmpoyee Button
 	protected void AddEmployeeActionPerform(ActionEvent e) {
 		// TODO Auto-generated method stub
-		Connectemployee connectemployee = new Connectemployee();
-		connectemployee.Connect();
 		if(employee_name.getText().equals("")||employee_adress.getText().equals("")||employee_phone.getText().equals("")||employee_salary.getText().equals("")||employee_birth.getDate() == null||employee_position.getSelectedItem().equals("")) {
 			JOptionPane.showMessageDialog(this, "You must enter all information");
 		}else {
@@ -1127,37 +1284,47 @@ public class ManagerFrame extends JFrame {
 				
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				String date = sdf.format(employee_birth.getDate());
-				int id = connectemployee.SelectID(connectemployee.getData_employee());
+				int id = SelectId.SelectID_employee(EmployeeJson.getEmployee());
 				String male = String.valueOf(employee_male.getSelectedItem());
 				String position = String.valueOf(employee_position.getSelectedItem());
 				if(String.valueOf(employee_position.getSelectedItem()).equals("employee")){
-					Employee employee = new Employee(id,employee_name.getText(),male,Date.valueOf(date),employee_adress.getText(),employee_phone.getText(),Integer.parseInt(employee_salary.getText()),position);
-					connectemployee.insertDB_employee(employee);
+					Employee employee = new Employee(id,employee_name.getText(),male,String.valueOf(date),employee_adress.getText(),employee_phone.getText(),Integer.parseInt(employee_salary.getText()),position);
+					ArrayList<Employee> array = new ArrayList<Employee>();
+					array.add(employee);
+					EmployeeJson.insertEmployee(array);
+					JOptionPane.showMessageDialog(this, "Sucessful");
 				}
 				if(String.valueOf(employee_position.getSelectedItem()).equals("manager")&& !check.isNotCommission(employee_commission.getText())){
-					Manager manager = new Manager(id,employee_name.getText(),male,Date.valueOf(date),employee_adress.getText(),employee_phone.getText(),Integer.parseInt(employee_salary.getText()),position,Integer.parseInt(employee_commission.getText()));
-					connectemployee.insertDB_employee(manager);
-					connectemployee.insertDB_employeemanager(manager);
-				}
-				if(String.valueOf(employee_position.getSelectedItem()).equals("shipper")){
-					Employee employee = new Employee(id,employee_name.getText(),male,Date.valueOf(date),employee_adress.getText(),employee_phone.getText(),Integer.parseInt(employee_salary.getText()),position);
-					connectemployee.insertDB_employee(employee);	
-					connectemployee.inserDB_shipper(employee);
+					Manager manager = new Manager(id,employee_name.getText(),male,String.valueOf(date),employee_adress.getText(),employee_phone.getText(),Integer.parseInt(employee_salary.getText()),position,Integer.parseInt(employee_commission.getText()));
+					EmployeeJson.insertManager(manager);
+					JOptionPane.showMessageDialog(this, "Sucessful");
 				}
 			}	
 		}
 		
 	}
-	//Logout Button
+	//Logout Button 
 	protected void btnlogoutactionperformed(ActionEvent arg0) {
 		Object[] options = { "OK", "CANCEL" };
 		int choose = JOptionPane.showOptionDialog(this, "Do you want to logout?", "Warning",
 		JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
 		null, options, options[0]);
 		if(choose == JOptionPane.OK_OPTION){
-		login login = new login();
-		login.setVisible(true);
-		this.dispose();
+			login login = new login();
+			login.setVisible(true);
+			this.dispose();
 		}
+	}
+	/**
+	 * @return the employee
+	 */
+	public Employee getEmployee() {
+		return employee;
+	}
+	/**
+	 * @param employee the employee to set
+	 */
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
 	}
 }
